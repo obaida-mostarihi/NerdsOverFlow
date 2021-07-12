@@ -1,3 +1,11 @@
+/*
+ *
+ * Created by Obaida Al Mostarihi on 7/12/21, 8:24 PM
+ * Copyright (c) 2021 . All rights reserved.
+ * Last modified 7/12/21, 8:24 PM
+ *
+ */
+
 package com.yoron.nerdsoverflow.viewModels
 
 import androidx.lifecycle.LiveData
@@ -35,9 +43,9 @@ class LoginViewModel @Inject constructor(
      */
     fun loginToAccount(email: String, password: String) {
         viewModelScope.launch {
-            _loading.postValue(true)
+            _loading.value = (true)
             _dataOrException.postValue(authRepo.loginUserToAnAccount(email, password))
-            _loading.postValue(false)
+            _loading.value = (false)
         }
     }
 
@@ -75,4 +83,4 @@ data class ErrorModel<T : ErrorType, E : Exception>(
 )
 
 typealias Error = ErrorModel<ErrorType, Exception>
-typealias AuthDataOrException = DataOrException<AuthResult, FirebaseAuthException>
+typealias AuthDataOrException = DataOrException<AuthResult, Exception>

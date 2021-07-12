@@ -1,3 +1,11 @@
+/*
+ *
+ * Created by Obaida Al Mostarihi on 7/12/21, 8:24 PM
+ * Copyright (c) 2021 . All rights reserved.
+ * Last modified 7/12/21, 8:24 PM
+ *
+ */
+
 package com.yoron.nerdsoverflow.repositories
 
 import com.google.firebase.auth.FirebaseAuth
@@ -23,6 +31,8 @@ class AuthRepository @Inject constructor(
             val authResult = auth.signInWithEmailAndPassword(email, password).await()
             dataOrException.data = authResult
         }catch (e: FirebaseAuthException){
+            dataOrException.e = e
+        }catch (e: Exception){
             dataOrException.e = e
         }
 

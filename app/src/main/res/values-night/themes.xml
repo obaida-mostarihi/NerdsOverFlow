@@ -1,3 +1,11 @@
+<!--
+  ~
+  ~ Created by Obaida Al Mostarihi on 7/12/21, 8:24 PM
+  ~ Copyright (c) 2021 . All rights reserved.
+  ~ Last modified 7/12/21, 8:24 PM
+  ~
+  -->
+
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Theme.NerdsOverFlow" parent="Theme.MaterialComponents.DayNight.NoActionBar">
@@ -12,5 +20,7 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <item name="android:windowActivityTransitions">true</item>
+
     </style>
 </resources>

@@ -1,13 +1,24 @@
+/*
+ *
+ * Created by Obaida Al Mostarihi on 7/12/21, 8:24 PM
+ * Copyright (c) 2021 . All rights reserved.
+ * Last modified 7/12/21, 8:24 PM
+ *
+ */
+
 package com.yoron.nerdsoverflow.authActivities
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
+import com.google.firebase.auth.FirebaseAuthException
+import com.yoron.nerdsoverflow.MainActivity
 import com.yoron.nerdsoverflow.R
 import com.yoron.nerdsoverflow.customViews.CoderWriterView
+import com.yoron.nerdsoverflow.dialogs.LoadingDialog
 import com.yoron.nerdsoverflow.viewModels.AuthDataOrException
 import com.yoron.nerdsoverflow.viewModels.Error
 import com.yoron.nerdsoverflow.viewModels.ErrorType
@@ -34,12 +45,28 @@ class LoginActivity : AppCompatActivity() {
 
     }
 
+
+    /**
+     * Setup all view model observers
+     */
     private fun viewModelObservers() {
+        val loadingDialog = LoadingDialog(this, false)
+
         //Listen for edit texts errors
-        viewModel.loginError.observe(this, loginObserver())
+        viewModel.loginError.observe(this, loginErrorObserver())
 
         //Listen for login await data or exception
         viewModel.dataOrException.observe(this, dataOrExceptionObserver())
+
+        //Listen for the loading event
+        viewModel.loading.observe(this) { loading ->
+            if (loading) {
+                loadingDialog.show()
+            } else {
+                if (loadingDialog.isShowing)
+                    loadingDialog.dismiss()
+            }
+        }
     }
 
 
@@ -63,38 +90,65 @@ class LoginActivity : AppCompatActivity() {
 
     }
 
-
+    /**
+     * Check if the observer returns error or data if error then show the error else intent to MainActivity.class.
+     */
     private fun dataOrExceptionObserver() = Observer<AuthDataOrException> { dataOrException ->
         dataOrException.e?.let {
-            when(it.errorCode){
-                "ERROR_INVALID_EMAIL" -> setTvError(loginEmailErrorTv , "The email address is badly formatted.")
-                "ERROR_INVALID_CREDENTIAL" -> setTvError(loginEmailErrorTv , "The supplied auth credential is malformed or has expired.")
-                "ERROR_USER_DISABLED" -> setTvError(loginEmailErrorTv , "The user account has been disabled by an administrator.")
-                "ERROR_USER_NOT_FOUND" -> setTvError(loginEmailErrorTv , "There is no user record corresponding to this identifier. The user may have been deleted.")
-                "ERROR_WRONG_PASSWORD" -> setTvError(loginPasswordErrorTv , "The password is invalid or the user does not have a password.")
-                else -> setTvError(loginEmailErrorTv , it.localizedMessage)
+            try {
+                it as FirebaseAuthException
+                when (it.errorCode) {
+                    "ERROR_INVALID_EMAIL" -> setTvError(
+                        loginEmailErrorTv,
+                        "The email address is badly formatted."
+                    )
+                    "ERROR_INVALID_CREDENTIAL" -> setTvError(
+                        loginEmailErrorTv,
+                        "The supplied auth credential is malformed or has expired."
+                    )
+                    "ERROR_USER_DISABLED" -> setTvError(
+                        loginEmailErrorTv,
+                        "The user account has been disabled by an administrator."
+                    )
+                    "ERROR_USER_NOT_FOUND" -> setTvError(
+                        loginEmailErrorTv,
+                        "There is no user record corresponding to this identifier. The user may have been deleted."
+                    )
+                    "ERROR_WRONG_PASSWORD" -> setTvError(
+                        loginPasswordErrorTv,
+                        "The password is invalid or the user does not have a password."
+                    )
+                    else -> setTvError(loginEmailErrorTv, it.localizedMessage)
 
+                }
+            } catch (e: Exception) {
+                setTvError(loginEmailErrorTv, it.localizedMessage)
             }
-            Log.v("looool", it.errorCode)
+
             return@Observer
         }
 
+        val intent = Intent(this, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+        finish()
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 
     }
 
-    private fun loginObserver() = Observer<Error> { error ->
+    private fun loginErrorObserver() = Observer<Error> { error ->
         when (error.type) {
             ErrorType.EMAIL -> {
-                setTvError(loginEmailErrorTv,error.exception.localizedMessage)
+                setTvError(loginEmailErrorTv, error.exception.localizedMessage)
             }
             ErrorType.PASSWORD -> {
-                setTvError(loginPasswordErrorTv,error.exception.localizedMessage)
+                setTvError(loginPasswordErrorTv, error.exception.localizedMessage)
             }
         }
     }
 
 
-    private fun setTvError(textView: CoderWriterView, error: String){
+    private fun setTvError(textView: CoderWriterView, error: String) {
         textView.setWithMusic(false)
         textView.removeAnimation()
         textView.loopCursor = false
@@ -102,6 +156,7 @@ class LoginActivity : AppCompatActivity() {
         textView.animateText(error)
         textView.visibility = View.VISIBLE
     }
+
     private fun animateTitle() {
         loginTitle.setWithMusic(true)
         loginTitle.animateText("NerdsOverFlow")

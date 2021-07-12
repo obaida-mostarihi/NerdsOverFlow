@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~
+  ~ Created by Obaida Al Mostarihi on 7/12/21, 8:24 PM
+  ~ Copyright (c) 2021 . All rights reserved.
+  ~ Last modified 7/12/21, 8:24 PM
+  ~
+  -->
+
 <shape xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <solid android:color="@color/darkColor"/>
