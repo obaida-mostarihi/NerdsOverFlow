@@ -3,31 +3,43 @@ package com.yoron.nerdsoverflow.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.google.firebase.auth.AuthResult
+import com.google.firebase.auth.FirebaseAuthException
+import com.yoron.nerdsoverflow.classes.DataOrException
+import com.yoron.nerdsoverflow.repositories.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-
+    private val authRepo: AuthRepository
 ) : ViewModel() {
 
     private val _loginError = MutableLiveData<Error>()
     val loginError: LiveData<Error> = _loginError
 
 
+    private val _dataOrException = MutableLiveData<AuthDataOrException>()
+    val dataOrException: LiveData<AuthDataOrException> = _dataOrException
+
+
+    private val _loading = MutableLiveData<Boolean>()
+    val loading : LiveData<Boolean> = _loading
+
     /**
      * Login user to an existing account
      * @param email the user's email
      * @param password the user's password
      */
-    fun loginToAccount(email: String, password: String){
-
+    fun loginToAccount(email: String, password: String) {
+        viewModelScope.launch {
+            _loading.postValue(true)
+            _dataOrException.postValue(authRepo.loginUserToAnAccount(email, password))
+            _loading.postValue(false)
+        }
     }
-
-
-
-
-
 
 
     /**
@@ -50,11 +62,6 @@ class LoginViewModel @Inject constructor(
     }
 
 
-
-
-
-
-
 }
 
 
@@ -68,3 +75,4 @@ data class ErrorModel<T : ErrorType, E : Exception>(
 )
 
 typealias Error = ErrorModel<ErrorType, Exception>
+typealias AuthDataOrException = DataOrException<AuthResult, FirebaseAuthException>
