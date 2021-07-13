@@ -11,13 +11,26 @@ package com.yoron.nerdsoverflow
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.activity.viewModels
+import androidx.core.content.ContextCompat
+import com.facebook.litho.ComponentContext
+import com.facebook.litho.ComponentTree
+import com.facebook.litho.sections.SectionContext
+import com.facebook.litho.sections.widget.RecyclerCollectionComponent
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.yoron.nerdsoverflow.authActivities.LoginActivity
 import com.yoron.nerdsoverflow.dialogs.LoadingDialog
+import com.yoron.nerdsoverflow.java.HomePostsDiffSectionSection
+import com.yoron.nerdsoverflow.viewModels.HomePostsViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.activity_main.*
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private val auth = Firebase.auth
+    private var mComponentTree: ComponentTree? = null
+    private val homePostsViewModel: HomePostsViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -30,10 +43,37 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
+        val c = ComponentContext(this)
+
+        mComponentTree =
+            ComponentTree.create(
+                c, RecyclerCollectionComponent.create(c)
+                    .section(
+                        HomePostsDiffSectionSection.create(SectionContext(c))
+                            .viewModel(homePostsViewModel)
+                    )
+
+                    .clipToPadding(false)
+                    .clipChildren(false)
+                    .refreshProgressBarColor(ContextCompat.getColor(this ,R.color.greenColor))
+                    .build()
+            )
+                .stateHandler(homePostsViewModel.getStateHandler())
+                .build()
+
+
+
 
         setContentView(R.layout.activity_main)
+        lithoView.componentTree = mComponentTree
 
 
+
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        homePostsViewModel.updateStateHandler(mComponentTree)
 
     }
 }
