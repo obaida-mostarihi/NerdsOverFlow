@@ -28,6 +28,7 @@ class UserImageNameComponentSpec {
 
 
 
+
     @OnCreateLayout
     static Component onCreateLayout(ComponentContext c,
                                     @Prop UserModel user,
@@ -53,7 +54,7 @@ class UserImageNameComponentSpec {
                         .child(
                                 TimestampComponent.create(c).heightDip(20).widthPercent(50).timestamp(timestamp)
                                 .marginDip(YogaEdge.START , 3)
-                                .marginDip(YogaEdge.TOP , 3)
+                                .marginDip(YogaEdge.TOP , 1)
 
                         ).widthPercent(100)
 

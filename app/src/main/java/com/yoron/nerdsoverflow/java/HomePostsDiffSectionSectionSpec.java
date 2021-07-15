@@ -9,11 +9,15 @@
 package com.yoron.nerdsoverflow.java;
 
 import android.util.Log;
+import android.view.View;
 
+import com.facebook.litho.ClickEvent;
 import com.facebook.litho.Column;
+import com.facebook.litho.ComponentContext;
 import com.facebook.litho.StateValue;
 import com.facebook.litho.annotations.FromEvent;
 import com.facebook.litho.annotations.OnCreateInitialState;
+import com.facebook.litho.annotations.OnCreateTreeProp;
 import com.facebook.litho.annotations.OnEvent;
 import com.facebook.litho.annotations.OnUpdateState;
 import com.facebook.litho.annotations.Param;
@@ -41,6 +45,7 @@ import com.facebook.litho.widget.RenderInfo;
 import com.facebook.litho.widget.Text;
 import com.facebook.yoga.YogaAlign;
 import com.yoron.nerdsoverflow.classes.DataOrException;
+import com.yoron.nerdsoverflow.interfaces.HomePostListeners;
 import com.yoron.nerdsoverflow.models.HomePostModel;
 import com.yoron.nerdsoverflow.viewModels.HomePostsViewModel;
 
@@ -56,13 +61,21 @@ class HomePostsDiffSectionSectionSpec {
             StateValue<Integer> start,
             StateValue<Integer> count,
             StateValue<Boolean> isFetching,
-            StateValue<Boolean> isEmpty
+            StateValue<Boolean> isEmpty,
+            StateValue<HomePostListeners> homePostListeners,
+            @Prop HomePostListeners homePostListenersInit
     ) {
         start.set(0);
         count.set(7);
         isFetching.set(false);
         isEmpty.set(false);
         posts.set(new DataOrException<>(Collections.emptyList(), new Exception()));
+        homePostListeners.set(homePostListenersInit);
+    }
+
+    @OnCreateTreeProp
+    static HomePostListeners onCreateHomePostListeners(SectionContext c, @State HomePostListeners homePostListeners) {
+        return homePostListeners;
     }
 
     @OnCreateChildren
@@ -100,18 +113,26 @@ class HomePostsDiffSectionSectionSpec {
             SectionContext c,
             @FromEvent int index,
             @FromEvent HomePostModel model,
-            @Prop HomePostsViewModel viewModel
+            @Prop HomePostsViewModel viewModel,
+            @State HomePostListeners homePostListeners
     ) {
 
         return ComponentRenderInfo.create()
                 .component(
                         HomePostComponent.create(c)
-                        .post(model)
+                                .post(model)
+                                .clickable(true)
+                                .clickHandler(HomePostsDiffSectionSection.onPostClicked(c ,model ,homePostListeners))
 
                 )
                 .build();
     }
 
+
+    @OnEvent(ClickEvent.class)
+    static void onPostClicked(SectionContext c , @Param HomePostModel post,@Param HomePostListeners homePostListeners ) {
+        homePostListeners.onPostClicked(c.getAndroidContext() , post);
+    }
 
     @OnCreateService
     static HomePostsViewModel onCreateService(

@@ -121,6 +121,13 @@ dependencies {
     implementation "com.airbnb.android:lottie:$lottie_version"
 
 
+    //BottomSheet
+    implementation 'com.github.andrefrsousa:SuperBottomSheet:2.0.0'
+
+
+    implementation 'Codeview-1.0.0:webviewcode:1.0.0'
+
+
 
     // Test
     testImplementation 'junit:junit:4.13.2'

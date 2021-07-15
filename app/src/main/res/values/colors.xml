@@ -16,6 +16,7 @@
     <color name="greenColor">#26A60E</color>
     <color name="darkGreenColor">#135307</color>
     <color name="darkColor">#303030</color>
+    <color name="lightColor">#F6F6F6</color>
     <color name="errorColor">#ff3333</color>
 
 </resources>

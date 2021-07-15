@@ -42,7 +42,6 @@ class HomePostsRepository @Inject constructor(
                 try {
                     dataOrExceptionVar.data = query.get().await().mapNotNull { document ->
                         val model = document.toObject(HomePostModel::class.java)
-                        model.question?.let { Log.v("loool" , it) }
                         model.copy(documentSnapshot = document)
                     }
                 }catch (e: Exception){

@@ -21,6 +21,7 @@ data class HomePostModel(
     @ServerTimestamp
     val timestamp: Timestamp? = null,
     val user: UserModel? = UserModel(),
-    val documentSnapshot: DocumentSnapshot? = null
+    val documentSnapshot: DocumentSnapshot? = null,
+    val code: String? = null
     ){
 }

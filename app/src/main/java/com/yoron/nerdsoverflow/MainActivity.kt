@@ -8,11 +8,14 @@
 
 package com.yoron.nerdsoverflow
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.FragmentManager
 import com.facebook.litho.ComponentContext
 import com.facebook.litho.ComponentTree
 import com.facebook.litho.sections.SectionContext
@@ -21,13 +24,16 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.yoron.nerdsoverflow.authActivities.LoginActivity
 import com.yoron.nerdsoverflow.dialogs.LoadingDialog
+import com.yoron.nerdsoverflow.dialogs.PostBottomSheetDialog
+import com.yoron.nerdsoverflow.interfaces.HomePostListeners
 import com.yoron.nerdsoverflow.java.HomePostsDiffSectionSection
+import com.yoron.nerdsoverflow.models.HomePostModel
 import com.yoron.nerdsoverflow.viewModels.HomePostsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), HomePostListeners {
     private val auth = Firebase.auth
     private var mComponentTree: ComponentTree? = null
     private val homePostsViewModel: HomePostsViewModel by viewModels()
@@ -51,6 +57,7 @@ class MainActivity : AppCompatActivity() {
                     .section(
                         HomePostsDiffSectionSection.create(SectionContext(c))
                             .viewModel(homePostsViewModel)
+                            .homePostListenersInit(this)
                     )
 
                     .clipToPadding(false)
@@ -75,5 +82,10 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
         homePostsViewModel.updateStateHandler(mComponentTree)
 
+    }
+
+    override fun onPostClicked(context: Context, post: HomePostModel) {
+        super.onPostClicked(context, post)
+        PostBottomSheetDialog(post).show(supportFragmentManager , "post")
     }
 }
