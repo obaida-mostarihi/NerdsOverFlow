@@ -42,8 +42,11 @@ import com.facebook.litho.sections.common.SingleComponentSection;
 import com.facebook.litho.widget.ComponentRenderInfo;
 import com.facebook.litho.widget.Progress;
 import com.facebook.litho.widget.RenderInfo;
+import com.facebook.litho.widget.SolidColor;
 import com.facebook.litho.widget.Text;
 import com.facebook.yoga.YogaAlign;
+import com.facebook.yoga.YogaEdge;
+import com.yoron.nerdsoverflow.R;
 import com.yoron.nerdsoverflow.classes.DataOrException;
 import com.yoron.nerdsoverflow.interfaces.HomePostListeners;
 import com.yoron.nerdsoverflow.models.HomePostModel;
@@ -119,10 +122,26 @@ class HomePostsDiffSectionSectionSpec {
 
         return ComponentRenderInfo.create()
                 .component(
-                        HomePostComponent.create(c)
-                                .post(model)
-                                .clickable(true)
-                                .clickHandler(HomePostsDiffSectionSection.onPostClicked(c ,model ,homePostListeners))
+                        Column.create(c)
+                                .child(
+                                        HomePostComponent.create(c)
+                                                .post(model)
+                                                .clickable(true)
+                                                .focusable(true)
+                                                .paddingDip(YogaEdge.VERTICAL , 10)
+                                                .backgroundAttr(android.R.attr.selectableItemBackground)
+                                                .clickHandler(HomePostsDiffSectionSection.onPostClicked(c, model, homePostListeners))
+                                )
+                                .child(
+                                        SolidColor.create(c)
+                                                .colorRes(R.color.darkColor)
+                                                .widthPercent(100)
+                                                .heightDip(0.5f)
+                                                .alpha(0.3f)
+                                                .paddingDip(YogaEdge.HORIZONTAL , 10)
+
+                                ).key(index + "")
+
 
                 )
                 .build();
@@ -130,8 +149,8 @@ class HomePostsDiffSectionSectionSpec {
 
 
     @OnEvent(ClickEvent.class)
-    static void onPostClicked(SectionContext c , @Param HomePostModel post,@Param HomePostListeners homePostListeners ) {
-        homePostListeners.onPostClicked(c.getAndroidContext() , post);
+    static void onPostClicked(SectionContext c, @Param HomePostModel post, @Param HomePostListeners homePostListeners) {
+        homePostListeners.onPostClicked(c.getAndroidContext(), post);
     }
 
     @OnCreateService

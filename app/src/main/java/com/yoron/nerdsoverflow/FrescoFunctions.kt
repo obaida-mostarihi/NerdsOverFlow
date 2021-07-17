@@ -10,6 +10,10 @@ package com.yoron.nerdsoverflow
 
 import com.facebook.drawee.backends.pipeline.Fresco
 import com.facebook.drawee.controller.AbstractDraweeController
+import com.facebook.drawee.generic.RoundingParams
+
+
+fun getCircleRoundParams(): RoundingParams = RoundingParams.fromCornersRadius(5f).setRoundAsCircle(true)
 
 
 fun getImageController(imageUrl : String): AbstractDraweeController<Any, Any> = Fresco.newDraweeControllerBuilder()

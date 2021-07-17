@@ -14,11 +14,10 @@ import com.facebook.litho.Component;
 import com.facebook.litho.ComponentContext;
 import com.facebook.litho.Column;
 import com.facebook.litho.annotations.LayoutSpec;
-import com.facebook.litho.annotations.OnCreateInitialState;
 import com.facebook.litho.annotations.OnCreateLayout;
 import com.facebook.litho.annotations.Prop;
 import com.facebook.litho.fresco.FrescoImage;
-import com.yoron.nerdsoverflow.FrescoControllersKt;
+import com.yoron.nerdsoverflow.FrescoFunctionsKt;
 
 @LayoutSpec
 class FrescoImageViewSpec {
@@ -31,7 +30,7 @@ class FrescoImageViewSpec {
 
 
         return Column.create(c).child(FrescoImage.create(c)
-                .controller(FrescoControllersKt.getImageController(url))
+                .controller(FrescoFunctionsKt.getImageController(url))
                 .fadeDuration(500)
                 .roundingParams(isCircle ? RoundingParams.asCircle() : null)
                 .actualImageScaleType(ScalingUtils.ScaleType.CENTER_CROP))

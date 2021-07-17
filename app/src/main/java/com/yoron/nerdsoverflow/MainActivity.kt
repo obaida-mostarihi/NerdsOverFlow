@@ -86,6 +86,10 @@ class MainActivity : AppCompatActivity(), HomePostListeners {
 
     override fun onPostClicked(context: Context, post: HomePostModel) {
         super.onPostClicked(context, post)
-        PostBottomSheetDialog(post).show(supportFragmentManager , "post")
+        val postBottomSheet = PostBottomSheetDialog()
+        postBottomSheet.show(supportFragmentManager , "post")
+        postBottomSheet.setPostDetails(post)
+
+
     }
 }

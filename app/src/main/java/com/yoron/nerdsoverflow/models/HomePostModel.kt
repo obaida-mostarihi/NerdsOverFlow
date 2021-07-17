@@ -17,11 +17,13 @@ data class HomePostModel(
     @DocumentId
     val postId: String? = "",
     val uid: String? = "",
-    val question: String? = "",
+    val title: String? = "",
+    val question:String? = "",
+    val code: String? = null,
+    val answered: Boolean? = false,
     @ServerTimestamp
     val timestamp: Timestamp? = null,
     val user: UserModel? = UserModel(),
-    val documentSnapshot: DocumentSnapshot? = null,
-    val code: String? = null
+    val documentSnapshot: DocumentSnapshot? = null
     ){
 }

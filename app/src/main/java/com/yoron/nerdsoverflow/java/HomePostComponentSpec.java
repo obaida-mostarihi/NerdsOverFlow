@@ -12,7 +12,6 @@ import com.facebook.litho.Component;
 import com.facebook.litho.ComponentContext;
 import com.facebook.litho.Column;
 import com.facebook.litho.annotations.LayoutSpec;
-import com.facebook.litho.annotations.OnCreateInitialState;
 import com.facebook.litho.annotations.OnCreateLayout;
 import com.facebook.litho.annotations.Prop;
 import com.facebook.litho.widget.SolidColor;
@@ -33,26 +32,18 @@ class HomePostComponentSpec {
         return Column.create(c)
                 .child(
                         Text.create(c)
-                                .text(post.getQuestion())
+                                .text(post.getTitle())
                                 .textColorRes(R.color.darkColor)
                                 .alignment(TextAlignment.LAYOUT_START)
                                 .textSizeSp(18)
                                 .maxLines(2)
+
                 )
                 .child(
                         UserImageNameComponent.create(c).user(post.getUser())
                         .timestamp(post.getTimestamp())
                 )
-                .child(
-                        SolidColor.create(c)
-                                .colorRes(R.color.darkColor)
-                                .widthPercent(100)
-                                .heightDip(0.5f)
-                                .alpha(0.3f)
-                                .marginDip(YogaEdge.VERTICAL , 10)
-
-                ).paddingDip(YogaEdge.HORIZONTAL , 10)
-
+                .paddingDip(YogaEdge.HORIZONTAL , 10)
 
                 .build();
     }
