@@ -1,0 +1,20 @@
+<!--
+  ~
+  ~ Created by Obaida Al Mostarihi on 7/21/21, 12:16 AM
+  ~ Copyright (c) 2021 . All rights reserved.
+  ~ Last modified 7/21/21, 12:16 AM
+  ~
+  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="30dp"
+    android:height="30dp"
+    android:viewportWidth="30"
+    android:viewportHeight="30">
+  <path
+      android:pathData="M6,0L24,0A6,6 0,0 1,30 6L30,24A6,6 0,0 1,24 30L6,30A6,6 0,0 1,0 24L0,6A6,6 0,0 1,6 0z"
+      android:fillColor="@color/darkColor"/>
+  <path
+      android:fillColor="@color/lightColor"
+      android:pathData="M24,11.59L24,7a1,1 0,0 0,-1 -1L18.41,6a1,1 0,0 0,-0.71 1.71L19.29,9.3l-10,10L7.7,17.71a0.994,0.994 0,0 0,-1.7 0.7L6,23a1,1 0,0 0,1 1L11.59,24a1,1 0,0 0,0.71 -1.71L10.71,20.7l10,-10L22.3,12.29A0.994,0.994 0,0 0,24 11.59Z"/>
+</vector>

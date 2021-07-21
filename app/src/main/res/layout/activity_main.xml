@@ -18,10 +18,9 @@
    >
 
 
-    <com.facebook.litho.LithoView
-        android:id="@+id/lithoView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
+   <FrameLayout
+       android:id="@+id/mainActivityContainer"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"/>
 
   </androidx.constraintlayout.widget.ConstraintLayout>

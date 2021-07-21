@@ -1,23 +1,21 @@
 /*
  *
- * Created by Obaida Al Mostarihi on 7/13/21, 1:58 PM
+ * Created by Obaida Al Mostarihi on 7/20/21, 6:08 AM
  * Copyright (c) 2021 . All rights reserved.
- * Last modified 7/13/21, 1:58 PM
+ * Last modified 7/19/21, 6:29 PM
  *
  */
 
-package com.yoron.nerdsoverflow.java;
+package com.yoron.nerdsoverflow.java.home;
 
 import android.util.Log;
 import android.view.View;
 
 import com.facebook.litho.ClickEvent;
 import com.facebook.litho.Column;
-import com.facebook.litho.ComponentContext;
 import com.facebook.litho.StateValue;
 import com.facebook.litho.annotations.FromEvent;
 import com.facebook.litho.annotations.OnCreateInitialState;
-import com.facebook.litho.annotations.OnCreateTreeProp;
 import com.facebook.litho.annotations.OnEvent;
 import com.facebook.litho.annotations.OnUpdateState;
 import com.facebook.litho.annotations.Param;
@@ -35,27 +33,25 @@ import com.facebook.litho.sections.annotations.OnRefresh;
 import com.facebook.litho.sections.annotations.OnUnbindService;
 import com.facebook.litho.sections.annotations.OnViewportChanged;
 import com.facebook.litho.sections.common.DataDiffSection;
-import com.facebook.litho.sections.common.OnCheckIsSameContentEvent;
-import com.facebook.litho.sections.common.OnCheckIsSameItemEvent;
 import com.facebook.litho.sections.common.RenderEvent;
 import com.facebook.litho.sections.common.SingleComponentSection;
 import com.facebook.litho.widget.ComponentRenderInfo;
 import com.facebook.litho.widget.Progress;
 import com.facebook.litho.widget.RenderInfo;
 import com.facebook.litho.widget.SolidColor;
-import com.facebook.litho.widget.Text;
 import com.facebook.yoga.YogaAlign;
 import com.facebook.yoga.YogaEdge;
 import com.yoron.nerdsoverflow.R;
 import com.yoron.nerdsoverflow.classes.DataOrException;
-import com.yoron.nerdsoverflow.interfaces.HomePostListeners;
+
+import com.yoron.nerdsoverflow.java.OnPostClickedEvent;
 import com.yoron.nerdsoverflow.models.HomePostModel;
 import com.yoron.nerdsoverflow.viewModels.HomePostsViewModel;
 
 import java.util.Collections;
 import java.util.List;
 
-@GroupSectionSpec
+@GroupSectionSpec(events = {OnPostClickedEvent.class})
 class HomePostsDiffSectionSectionSpec {
     @OnCreateInitialState
     static void createInitialState(
@@ -64,22 +60,16 @@ class HomePostsDiffSectionSectionSpec {
             StateValue<Integer> start,
             StateValue<Integer> count,
             StateValue<Boolean> isFetching,
-            StateValue<Boolean> isEmpty,
-            StateValue<HomePostListeners> homePostListeners,
-            @Prop HomePostListeners homePostListenersInit
+            StateValue<Boolean> isEmpty
     ) {
         start.set(0);
         count.set(7);
         isFetching.set(false);
         isEmpty.set(false);
         posts.set(new DataOrException<>(Collections.emptyList(), new Exception()));
-        homePostListeners.set(homePostListenersInit);
     }
 
-    @OnCreateTreeProp
-    static HomePostListeners onCreateHomePostListeners(SectionContext c, @State HomePostListeners homePostListeners) {
-        return homePostListeners;
-    }
+
 
     @OnCreateChildren
     static Children onCreateChildren(
@@ -116,9 +106,7 @@ class HomePostsDiffSectionSectionSpec {
             SectionContext c,
             @FromEvent int index,
             @FromEvent HomePostModel model,
-            @Prop HomePostsViewModel viewModel,
-            @State HomePostListeners homePostListeners
-    ) {
+            @Prop HomePostsViewModel viewModel) {
 
         return ComponentRenderInfo.create()
                 .component(
@@ -130,7 +118,7 @@ class HomePostsDiffSectionSectionSpec {
                                                 .focusable(true)
                                                 .paddingDip(YogaEdge.VERTICAL , 10)
                                                 .backgroundAttr(android.R.attr.selectableItemBackground)
-                                                .clickHandler(HomePostsDiffSectionSection.onPostClicked(c, model, homePostListeners))
+                                                .clickHandler(HomePostsDiffSectionSection.onPostClicked(c, model ))
                                 )
                                 .child(
                                         SolidColor.create(c)
@@ -149,14 +137,17 @@ class HomePostsDiffSectionSectionSpec {
 
 
     @OnEvent(ClickEvent.class)
-    static void onPostClicked(SectionContext c, @Param HomePostModel post, @Param HomePostListeners homePostListeners) {
-        homePostListeners.onPostClicked(c.getAndroidContext(), post);
+    static void onPostClicked(SectionContext c, @FromEvent View view,@Param HomePostModel post ) {
+//        homePostListeners.onPostClicked(c, post);
+        HomePostsDiffSectionSection.dispatchOnPostClickedEvent(HomePostsDiffSectionSection.getOnPostClickedEventHandler(c), post , c);
     }
+
+
+
 
     @OnCreateService
     static HomePostsViewModel onCreateService(
             final SectionContext c,
-            @State DataOrException<List<HomePostModel>, Exception> posts,
             @State int start,
             @State int count,
             @Prop HomePostsViewModel viewModel

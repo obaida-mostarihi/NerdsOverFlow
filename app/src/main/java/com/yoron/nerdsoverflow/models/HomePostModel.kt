@@ -19,7 +19,14 @@ data class HomePostModel(
     val uid: String? = "",
     val title: String? = "",
     val question:String? = "",
-    val code: String? = null,
+    val code: String? = """private void main(){
+        |//comment
+        |int number = 0;
+        |for(number in numbers){
+        |
+        |
+        |}
+        |}""".trimMargin(),
     val answered: Boolean? = false,
     @ServerTimestamp
     val timestamp: Timestamp? = null,

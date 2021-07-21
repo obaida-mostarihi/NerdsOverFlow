@@ -52,11 +52,11 @@ class UserImageNameComponentSpec {
                                 .marginDip(YogaEdge.TOP , 10)
                                 .textSizeSp(12))
                         .child(
-                                TimestampComponent.create(c).heightDip(20).widthPercent(50).timestamp(timestamp)
+                                TimestampComponent.create(c).heightDip(20).widthPercent(100).timestamp(timestamp)
                                 .marginDip(YogaEdge.START , 3)
                                 .marginDip(YogaEdge.TOP , 1)
 
-                        ).widthPercent(100)
+                        ).widthPercent(70)
 
 
                 )

@@ -6,147 +6,46 @@
   ~
   -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.facebook.litho.LithoView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:background="@color/lightColor">
-    <View
-        android:id="@+id/view"
-        android:layout_width="40dp"
-        android:layout_height="10dp"
-        android:layout_marginTop="20dp"
-        android:alpha="0.2"
-        android:background="@drawable/button_shape"
-        android:backgroundTint="@color/darkColor"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-
-        android:layout_marginBottom="20dp"/>
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingHorizontal="10dp"
-    >
+    android:id="@+id/fullPostLithddoView">
 
 
-    <TextView
-        android:id="@+id/postQuestionTv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:lineSpacingExtra="3dp"
-        android:textColor="@color/darkColor"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="How to do this tell me now how how hoooooow ha???  thing?" />
 
 
-    <TextView
-        android:id="@+id/fullPostDesc"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        tools:text="This is the long text that the user have to write to describe the question a little bit more."
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:lineSpacingExtra="3dp"
-        android:elevation="10dp"
-        android:textSize="14sp"
-        android:textColor="@color/darkColor"
-        android:alpha="0.9"
-        app:layout_constraintTop_toBottomOf="@+id/postQuestionTv" />
 
 
-    <WebView
-        android:id="@+id/codeView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:background="@android:color/transparent"
-        android:backgroundTint="@android:color/transparent"
-        app:background="@android:color/transparent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fullPostDesc" />
 
 
-    <com.facebook.drawee.view.SimpleDraweeView
-        android:id="@+id/fullPostUserImage"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/codeView" />
 
-    <TextView
-        android:id="@+id/fullPostUsername"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:alpha="0.7"
-        android:textColor="@color/darkColor"
-        app:layout_constraintStart_toEndOf="@+id/fullPostUserImage"
-        app:layout_constraintTop_toTopOf="@+id/fullPostUserImage"
-        tools:text="YoronDaDude" />
-
-    <TextView
-        android:id="@+id/fullPostDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:alpha="0.5"
-        android:textColor="@color/darkColor"
-        android:textSize="11sp"
-        app:layout_constraintStart_toStartOf="@+id/fullPostUsername"
-        app:layout_constraintTop_toBottomOf="@+id/fullPostUsername"
-        tools:text="03/12" />
+<!--<androidx.constraintlayout.widget.ConstraintLayout-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent"-->
+<!--    android:paddingHorizontal="10dp"-->
+<!--    >-->
 
 
-    <TextView
-        android:id="@+id/fullPostAnsweredTv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/answered_shape"
-        android:paddingHorizontal="7dp"
-        android:paddingVertical="3dp"
-        android:text="Answered"
-        android:textColor="@color/greenColor"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="@+id/fullPostUserImage"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/fullPostUserImage" />
-    <View
-        android:id="@+id/view2"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="24dp"
-        android:alpha="0.3"
-        android:background="@color/darkColor"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fullPostUserImage" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/postAnswersRv"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="13dp"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view2" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.core.widget.NestedScrollView>
-</LinearLayout>
+<!--    <View-->
+<!--        android:id="@+id/view2"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="1dp"-->
+<!--        android:layout_marginTop="24dp"-->
+<!--        android:alpha="0.3"-->
+<!--        android:background="@color/darkColor"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/full_post_top" />-->
+
+
+
+
+<!--    -->
+<!--</androidx.constraintlayout.widget.ConstraintLayout>-->
+</com.facebook.litho.LithoView>

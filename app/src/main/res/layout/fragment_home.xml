@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~
+  ~ Created by Obaida Al Mostarihi on 7/18/21, 9:07 PM
+  ~ Copyright (c) 2021 . All rights reserved.
+  ~ Last modified 7/18/21, 9:07 PM
+  ~
+  -->
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".mainFragments.HomeFragment">
+
+    <com.yoron.nerdsoverflow.customViews.CustomBottomSheet
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/customBottomSheet"
+       >
+
+
+       <com.facebook.litho.LithoView
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:id="@+id/fullPostLithoView"
+           android:tag="content"
+           />
+
+    </com.yoron.nerdsoverflow.customViews.CustomBottomSheet>
+
+    <com.facebook.litho.LithoView
+        android:id="@+id/lithoView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+
+</FrameLayout>

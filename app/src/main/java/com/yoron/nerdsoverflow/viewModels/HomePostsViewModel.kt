@@ -9,7 +9,6 @@
 package com.yoron.nerdsoverflow.viewModels
 
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -17,12 +16,10 @@ import androidx.lifecycle.viewModelScope
 import com.facebook.litho.ComponentTree
 import com.facebook.litho.EventHandler
 import com.facebook.litho.StateHandler
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.ktx.Firebase
 
 import com.yoron.nerdsoverflow.classes.DataOrException
-import com.yoron.nerdsoverflow.java.HomePostsEvent
+import com.yoron.nerdsoverflow.java.home.HomePostsEvent
 import com.yoron.nerdsoverflow.models.HomePostModel
 import com.yoron.nerdsoverflow.repositories.HomePostsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -51,7 +48,6 @@ class HomePostsViewModel @Inject constructor(
 
     private val _posts = MutableLiveData<DataOrException<HomePostsList, Exception>> ()
     val posts: LiveData<DataOrException<HomePostsList , Exception>> = _posts
-
 
     /**
      * Save the scroll state...
@@ -88,7 +84,8 @@ class HomePostsViewModel @Inject constructor(
 
         repo.getPostsData {dataOrException ->
             _posts.postValue(dataOrException)
-            val homePostsEvent  = HomePostsEvent()
+            val homePostsEvent  =
+                HomePostsEvent()
             homePostsEvent.posts = dataOrException
             homePostsEvent.isEmpty = dataOrException.data?.isEmpty() ?: true
             homePostsEvent.isFirstLoad = true
@@ -109,7 +106,8 @@ class HomePostsViewModel @Inject constructor(
             viewModelScope.launch {
                 repo.getPostsData(documentSnapshot) { dataOrException ->
                     _posts.value?.data = _posts.value?.data.orEmpty() + dataOrException.data.orEmpty()
-                    val homePostsEvent  = HomePostsEvent()
+                    val homePostsEvent  =
+                        HomePostsEvent()
                     homePostsEvent.posts = _posts.value!!
                     homePostsEvent.isEmpty = dataOrException.data?.isEmpty() ?: true
                     homePostsEvent.isFirstLoad = false
@@ -130,7 +128,6 @@ class HomePostsViewModel @Inject constructor(
             loadData()
         }
     }
-
 
 
 

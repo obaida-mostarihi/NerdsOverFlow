@@ -26,8 +26,8 @@ class NerdsOverFlowApp : Application() {
         val settings = firestoreSettings {
             isPersistenceEnabled = true
         }
-        Firebase.firestore.firestoreSettings = settings
 
+        Firebase.firestore.firestoreSettings = settings
         Fresco.initialize(this)
         SoLoader.init(this, false)
     }

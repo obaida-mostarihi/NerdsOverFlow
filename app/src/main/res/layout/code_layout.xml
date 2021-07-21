@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~
+  ~ Created by Obaida Al Mostarihi on 7/21/21, 1:43 AM
+  ~ Copyright (c) 2021 . All rights reserved.
+  ~ Last modified 7/21/21, 1:43 AM
+  ~
+  -->
+
+<br.tiagohm.codeview.CodeView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/codeView">
+
+</br.tiagohm.codeview.CodeView>
