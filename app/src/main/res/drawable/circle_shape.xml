@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~
+  ~ Created by Obaida Al Mostarihi on 8/1/21, 3:46 PM
+  ~ Copyright (c) 2021 . All rights reserved.
+  ~ Last modified 8/1/21, 3:46 PM
+  ~
+  -->
+
+<shape
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+
+    <solid
+        android:color="#666666"/>
+
+    <size
+        android:width="23dp"
+        android:height="23dp"/>
+</shape>

@@ -47,7 +47,6 @@ class AnswersRepository @Inject constructor(
                     }
                 }catch (e: Exception){
                     dataOrExceptionVar.e = e
-                    Log.v("loool" , e.localizedMessage)
                 }
             }.invokeOnCompletion {
                 if (it == null)

@@ -8,6 +8,7 @@
 
 package com.yoron.nerdsoverflow.mainFragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -20,17 +21,21 @@ import com.facebook.litho.*
 import com.facebook.litho.sections.SectionContext
 import com.facebook.litho.sections.widget.RecyclerCollectionComponent
 import com.yoron.nerdsoverflow.R
+import com.yoron.nerdsoverflow.activities.FullScreenCodeActivity
 import com.yoron.nerdsoverflow.java.OnPostClickedEvent
 import com.yoron.nerdsoverflow.java.fullPost.FullPostDiffSection
 import com.yoron.nerdsoverflow.java.home.HomePostsDiffSectionSection
 import com.yoron.nerdsoverflow.models.AnswerModel
+import com.yoron.nerdsoverflow.models.HomePostModel
 import com.yoron.nerdsoverflow.models.UserModel
 import com.yoron.nerdsoverflow.viewModels.AnswersViewModel
+import com.yoron.nerdsoverflow.viewModels.FullAnswerListeners
+import com.yoron.nerdsoverflow.viewModels.HomePostListeners
 import com.yoron.nerdsoverflow.viewModels.HomePostsViewModel
 import kotlinx.android.synthetic.main.fragment_home.view.*
 
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), HomePostListeners, FullAnswerListeners {
 
     private var mComponentTree: ComponentTree? = null
     private var mFullPostComponentTree: ComponentTree? = null
@@ -48,12 +53,8 @@ class HomeFragment : Fragment() {
 
         val c = ComponentContext(requireContext())
 
-        val hasEventDispatcher = HasEventDispatcher { getPostEventDispatcher(view , c) }
-
-        val onPostClickEventEventHandler: EventHandler<OnPostClickedEvent> =
-            EventHandler(hasEventDispatcher, 1, null)
-
-
+        homePostsViewModel.setHomePostListeners(this)
+        answersViewModel.setFullAnswerListeners(this)
 
         mComponentTree =
             ComponentTree.create(
@@ -61,12 +62,17 @@ class HomeFragment : Fragment() {
                     .section(
                         HomePostsDiffSectionSection.create(SectionContext(c))
                             .viewModel(homePostsViewModel)
-                            .onPostClickedEventHandler(onPostClickEventEventHandler)
+                            .onPostClickedEventHandler(homePostsViewModel.onPostClickEventEventHandler)
 
                     )
                     .clipToPadding(false)
                     .clipChildren(false)
-                    .refreshProgressBarColor(ContextCompat.getColor(requireActivity(), R.color.greenColor))
+                    .refreshProgressBarColor(
+                        ContextCompat.getColor(
+                            requireActivity(),
+                            R.color.greenColor
+                        )
+                    )
                     .build()
             )
                 .stateHandler(homePostsViewModel.getStateHandler())
@@ -75,43 +81,57 @@ class HomeFragment : Fragment() {
 
 
 
-
         view.lithoView.componentTree = mComponentTree
+
         return view
     }
 
-    /**
-     * This triggers when the post is clicked.
-     */
-    fun getPostEventDispatcher(view: View , c: ComponentContext) =
-        EventDispatcher { eventHandler, eventState ->
-            val onClickEvent = eventState as OnPostClickedEvent
+
+    override fun onDestroy() {
+        super.onDestroy()
+        homePostsViewModel.updateStateHandler(mComponentTree)
+        answersViewModel.updateStateHandler(mFullPostComponentTree)
+    }
+
+
+    override fun onCodeClicked(code: String) {
+        super.onCodeClicked(code)
+        val intent = Intent(requireContext() , FullScreenCodeActivity::class.java)
+        intent.putExtra("code" , code)
+        requireActivity().startActivity(intent)
+    }
+
+    override fun onPostClicked(post: HomePostModel) {
+        super.onPostClicked(post)
+        view?.let { view ->
+            val c = ComponentContext(requireContext())
             view.customBottomSheet.animateToTop()
             mFullPostComponentTree =
                 ComponentTree.create(
                     c, RecyclerCollectionComponent.create(c)
                         .section(
                             FullPostDiffSection.create(SectionContext(c))
-                                .post(onClickEvent.post)
+                                .post(post)
                                 .viewModel(answersViewModel)
+                                .onCodeClickEventHandler(answersViewModel.onCodeClickEventEventHandler)
                         )
                         .clipToPadding(false)
                         .clipChildren(false)
                         .focusable(true)
                         .disablePTR(true)
-                        .refreshProgressBarColor(ContextCompat.getColor(requireActivity(), R.color.greenColor))
+                        .refreshProgressBarColor(
+                            ContextCompat.getColor(
+                                requireActivity(),
+                                R.color.greenColor
+                            )
+                        )
                         .build()
                 )
+                    .stateHandler(answersViewModel.getStateHandler())
                     .build()
-
             view.fullPostLithoView.componentTree = mFullPostComponentTree
-            null
+
         }
-
-
-    override fun onDestroy() {
-        super.onDestroy()
-        homePostsViewModel.updateStateHandler(mComponentTree)
     }
 
 }

@@ -125,9 +125,14 @@ dependencies {
 
 
 
-
+    //Code view
     implementation 'com.github.tiagohm:CodeView:0.4.0'
 
+    //layouts
+    implementation 'com.google.android.flexbox:flexbox:3.0.0'
+
+    //Alert dialog
+    implementation 'org.aviran.cookiebar2:cookiebar2:1.1.4'
 
     // Test
     testImplementation 'junit:junit:4.13.2'

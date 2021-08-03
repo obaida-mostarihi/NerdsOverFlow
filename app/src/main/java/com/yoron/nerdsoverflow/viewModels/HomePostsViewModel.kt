@@ -11,14 +11,14 @@ package com.yoron.nerdsoverflow.viewModels
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.facebook.litho.ComponentTree
+import com.facebook.litho.EventDispatcher
 import com.facebook.litho.EventHandler
-import com.facebook.litho.StateHandler
+import com.facebook.litho.HasEventDispatcher
 import com.google.firebase.firestore.DocumentSnapshot
 
 import com.yoron.nerdsoverflow.classes.DataOrException
+import com.yoron.nerdsoverflow.java.OnPostClickedEvent
 import com.yoron.nerdsoverflow.java.home.HomePostsEvent
 import com.yoron.nerdsoverflow.models.HomePostModel
 import com.yoron.nerdsoverflow.repositories.HomePostsRepository
@@ -29,44 +29,12 @@ import javax.inject.Inject
 @HiltViewModel
 class HomePostsViewModel @Inject constructor(
     val repo: HomePostsRepository
-):ViewModel(){
-
-    private var homePostsLoadingEventHandler: EventHandler<HomePostsEvent>? = null
-
-    fun registerLoadingEvent(homePostsLoadingEventHandler: EventHandler<HomePostsEvent>?) {
-        this.homePostsLoadingEventHandler = homePostsLoadingEventHandler
-    }
+) : LithoViewModel<HomePostsEvent>() {
+    private lateinit var homePostListeners: HomePostListeners
 
 
-    fun unregisterLoadingEvent() {
-        homePostsLoadingEventHandler = null
-    }
-
-
-
-
-
-    private val _posts = MutableLiveData<DataOrException<HomePostsList, Exception>> ()
-    val posts: LiveData<DataOrException<HomePostsList , Exception>> = _posts
-
-    /**
-     * Save the scroll state...
-     */
-    private val stateHandlerData: MutableLiveData<StateHandler> = MutableLiveData<StateHandler>()
-
-    fun getStateHandler(): StateHandler? {
-        return stateHandlerData.value
-    }
-
-    fun updateStateHandler(componentTree: ComponentTree?) {
-        if (componentTree != null) {
-            /**
-             * The current state values are wrapped in a StateHandler that lives on the ComponentTree.
-             * call acquireStateHandler to obtain a copy.
-             */
-            stateHandlerData.value = componentTree.acquireStateHandler()
-        }
-    }
+    private val _posts = MutableLiveData<DataOrException<HomePostsList, Exception>>()
+    val posts: LiveData<DataOrException<HomePostsList, Exception>> = _posts
 
 
     /**
@@ -79,18 +47,17 @@ class HomePostsViewModel @Inject constructor(
     }
 
 
+    private suspend fun loadData() {
 
-    private suspend fun loadData(){
-
-        repo.getPostsData {dataOrException ->
+        repo.getPostsData { dataOrException ->
             _posts.postValue(dataOrException)
-            val homePostsEvent  =
+            val homePostsEvent =
                 HomePostsEvent()
             homePostsEvent.posts = dataOrException
             homePostsEvent.isEmpty = dataOrException.data?.isEmpty() ?: true
             homePostsEvent.isFirstLoad = true
 
-            homePostsLoadingEventHandler?.dispatchEvent(homePostsEvent)
+            getLoadingEvent()?.dispatchEvent(homePostsEvent)
         }
 
 
@@ -101,18 +68,19 @@ class HomePostsViewModel @Inject constructor(
      * Load more posts by passing the last post's document snapshot
      * @param documentSnapshot pass the last post's document snapshot
      */
-    fun loadMorePosts(documentSnapshot: DocumentSnapshot?){
-        if(documentSnapshot != null)
+    fun loadMorePosts(documentSnapshot: DocumentSnapshot?) {
+        if (documentSnapshot != null)
             viewModelScope.launch {
                 repo.getPostsData(documentSnapshot) { dataOrException ->
-                    _posts.value?.data = _posts.value?.data.orEmpty() + dataOrException.data.orEmpty()
-                    val homePostsEvent  =
+                    _posts.value?.data =
+                        _posts.value?.data.orEmpty() + dataOrException.data.orEmpty()
+                    val homePostsEvent =
                         HomePostsEvent()
                     homePostsEvent.posts = _posts.value!!
                     homePostsEvent.isEmpty = dataOrException.data?.isEmpty() ?: true
                     homePostsEvent.isFirstLoad = false
 
-                    homePostsLoadingEventHandler?.dispatchEvent(homePostsEvent)
+                    getLoadingEvent()?.dispatchEvent(homePostsEvent)
                 }
 
             }
@@ -122,20 +90,35 @@ class HomePostsViewModel @Inject constructor(
     /**
      * Refresh replace the post array with a new one
      */
-    fun refreshData(){
+    fun refreshData() {
 
-        viewModelScope.launch{
+        viewModelScope.launch {
             loadData()
         }
     }
 
+    fun setHomePostListeners(homePostListeners: HomePostListeners) {
+        this.homePostListeners = homePostListeners
+    }
 
+    private val hasEventDispatcher = HasEventDispatcher { getPostEventDispatcher() }
 
+    /**
+     * This triggers when the post is clicked.
+     */
+    private fun getPostEventDispatcher() =
+        EventDispatcher { _, eventState ->
+            val onClickEvent = eventState as OnPostClickedEvent
+            homePostListeners.onPostClicked(onClickEvent.post)
+            null
+        }
 
+    val onPostClickEventEventHandler: EventHandler<OnPostClickedEvent> =
+        EventHandler(hasEventDispatcher, 1, null)
 
+}
 
-
-
-
+interface HomePostListeners {
+    fun onPostClicked(post: HomePostModel) {}
 }
 typealias HomePostsList = List<HomePostModel>

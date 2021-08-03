@@ -10,6 +10,8 @@ package com.yoron.nerdsoverflow.java.fullPost;
 
 import android.util.Log;
 
+import com.facebook.litho.Column;
+import com.facebook.litho.EventHandler;
 import com.facebook.litho.StateValue;
 import com.facebook.litho.annotations.FromEvent;
 import com.facebook.litho.annotations.OnCreateInitialState;
@@ -26,25 +28,22 @@ import com.facebook.litho.sections.annotations.GroupSectionSpec;
 import com.facebook.litho.sections.annotations.OnBindService;
 import com.facebook.litho.sections.annotations.OnCreateChildren;
 import com.facebook.litho.sections.annotations.OnCreateService;
-import com.facebook.litho.sections.annotations.OnRefresh;
 import com.facebook.litho.sections.annotations.OnUnbindService;
 import com.facebook.litho.sections.annotations.OnViewportChanged;
 import com.facebook.litho.sections.common.DataDiffSection;
-import com.facebook.litho.sections.common.OnCheckIsSameContentEvent;
-import com.facebook.litho.sections.common.OnCheckIsSameItemEvent;
 import com.facebook.litho.sections.common.RenderEvent;
 import com.facebook.litho.sections.common.SingleComponentSection;
 import com.facebook.litho.widget.ComponentRenderInfo;
+import com.facebook.litho.widget.Progress;
 import com.facebook.litho.widget.RenderInfo;
-import com.facebook.litho.widget.Text;
+import com.facebook.yoga.YogaAlign;
 import com.facebook.yoga.YogaEdge;
 import com.yoron.nerdsoverflow.classes.DataOrException;
+import com.yoron.nerdsoverflow.java.OnCodeClickEvent;
 import com.yoron.nerdsoverflow.java.home.HomePostsDiffSectionSection;
-import com.yoron.nerdsoverflow.java.home.HomePostsEvent;
 import com.yoron.nerdsoverflow.models.AnswerModel;
 import com.yoron.nerdsoverflow.models.HomePostModel;
 import com.yoron.nerdsoverflow.viewModels.AnswersViewModel;
-import com.yoron.nerdsoverflow.viewModels.HomePostsViewModel;
 
 
 import java.util.Collections;
@@ -75,26 +74,43 @@ class FullPostDiffSectionSpec {
     static Children onCreateChildren(
             SectionContext c,
             @State DataOrException<List<AnswerModel>, Exception> answers, @State boolean isEmpty,
-            @Prop HomePostModel post) {
+            @Prop HomePostModel post , @Prop EventHandler<OnCodeClickEvent> onCodeClickEventHandler, @State boolean isFetching
+    ) {
 
         Children.Builder builder = new Children.Builder();
 
-        builder .child(
-                SingleComponentSection.create(c).component(
-                        FullPostTopComponent.create(c)
-                                .post(post)
-                                .paddingDip(YogaEdge.HORIZONTAL, 16)
-                                .key("top")
-                )
+        if (post != null)
+            builder.child(
+                    SingleComponentSection.create(c).component(
+                            FullPostTopComponent.create(c)
+                                    .onCodeClickEventHandler(onCodeClickEventHandler)
+                                    .post(post)
+                                    .paddingDip(YogaEdge.HORIZONTAL, 16)
+                                    .key("top")
+                    )
+            );
+
+        builder.child(
+                DataDiffSection.<AnswerModel>create(c)
+                        .data(answers == null ? Collections.emptyList() : answers.getData())
+                        .renderEventHandler(FullPostDiffSection.onRender(c))
+
+
         );
 
-               builder.child(
-                        DataDiffSection.<AnswerModel>create(c)
-                                .data(answers == null ? Collections.emptyList() : answers.getData())
-                                .renderEventHandler(FullPostDiffSection.onRender(c))
+        if (answers != null && answers.getData() != null && !answers.getData().isEmpty() && !isEmpty && isFetching)
+            builder.child(
+                    SingleComponentSection.create(c).component(Column.create(c)
+                            .child(
+                                    Progress.create(c)
+                                            .widthDip(40)
+                                            .heightDip(40)
+                                            .alignSelf(YogaAlign.CENTER)
+                                            .build()
+                            )
+                    ).key("progress").build()
+            );
 
-
-                );
         return builder.build();
     }
 
@@ -102,11 +118,12 @@ class FullPostDiffSectionSpec {
     static RenderInfo onRender(
             SectionContext c,
             @FromEvent int index,
-            @FromEvent AnswerModel model) {
+            @FromEvent AnswerModel model, @Prop EventHandler<OnCodeClickEvent> onCodeClickEventHandler) {
         return ComponentRenderInfo.create()
                 .component(
                         AnswerComponent.create(c)
                                 .answerModel(model)
+                                .onCodeClickEventHandler(onCodeClickEventHandler)
                                 .paddingDip(YogaEdge.HORIZONTAL, 40)
                                 .paddingDip(YogaEdge.TOP, 24)
                                 .key(index + "")
@@ -125,8 +142,11 @@ class FullPostDiffSectionSpec {
 
     ) {
 
-        if(post.getPostId()!=null)
-        viewModel.getAnswers(post.getPostId());
+        if (post != null && post.getPostId() != null) {
+
+            viewModel.loadAnswers(post.getPostId());
+
+        }
         return viewModel;
     }
 
@@ -149,7 +169,7 @@ class FullPostDiffSectionSpec {
 
 
     @OnEvent(AnswersEvent.class)
-    static void onDataLoaded(final SectionContext c, @FromEvent DataOrException<List<AnswerModel>, Exception>  answers
+    static void onDataLoaded(final SectionContext c, @FromEvent DataOrException<List<AnswerModel>, Exception> answers
             , @FromEvent boolean isEmpty) {
         FullPostDiffSection.updateData(c, answers, isEmpty);
         FullPostDiffSection.setFetching(c, false);
@@ -205,6 +225,7 @@ class FullPostDiffSectionSpec {
             int lastFullyVisibleIndex,
             int totalCount,
             AnswersViewModel service,
+            @Prop HomePostModel post,
             @State DataOrException<List<AnswerModel>, Exception> answers,
             @State int start,
             @State int count,
@@ -213,11 +234,13 @@ class FullPostDiffSectionSpec {
     ) {
 
 
-        if (answers.getData() != null && totalCount == answers.getData().size() && !isFetching) {
-//            service.getAnswers(posts.getData().get(totalCount - 1).getDocumentSnapshot());
-//            HomePostsDiffSectionSection.setFetching(c, true);
-//
-//            HomePostsDiffSectionSection.updateStartParam(c, posts.getData().size());
+        if (totalCount != 0 && answers.getData() != null && totalCount == answers.getData().size() && !isFetching) {
+            if (post.getPostId() != null) {
+                service.loadMoreAnswers(answers.getData().get(totalCount - 1).getDocumentSnapshot(), post.getPostId());
+                FullPostDiffSection.setFetching(c, true);
+
+                FullPostDiffSection.updateStartParam(c, answers.getData().size());
+            }
         }
 //        if(isFetching)
 //        HomePostsDiffSectionSection.requestSmoothFocus(c , totalCount + 1 , SmoothScrollAlignmentType.SNAP_TO_CENTER);

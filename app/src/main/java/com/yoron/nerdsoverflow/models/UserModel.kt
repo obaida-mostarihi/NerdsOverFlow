@@ -11,5 +11,6 @@ package com.yoron.nerdsoverflow.models
 data class UserModel(
     val uid: String? = "",
     val image: String? = "https://kstu.edu.tr/kstu-file/uploads/default-user-image.png",
-    val username: String? = "YoronDaHacker",
+    val username: String? = "Nerd",
+    val selectedLanguages: ArrayList<ProgrammingLanguageModel>? = null
 )

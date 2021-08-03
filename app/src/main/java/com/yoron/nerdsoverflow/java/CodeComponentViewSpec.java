@@ -58,10 +58,11 @@ class CodeComponentViewSpec {
         codeView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         if (code != null)
             codeView
+                    .setLanguage(Language.AUTO)
                     .setTheme(Theme.AGATE)
                     .setCode(code)
-                    .setLanguage(Language.JAVA)
                     .setFontSize(14)
+                    .setWrapLine(true)
                     .apply();
         codeView.setBackgroundColor(ContextCompat.getColor(context.getAndroidContext(), R.color.lightColor));
 

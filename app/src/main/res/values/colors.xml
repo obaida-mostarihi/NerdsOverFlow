@@ -12,11 +12,18 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
+    <color name="code_background">#333333</color>
+    <color name="light_icon">#F6F6F6</color>
 
     <color name="greenColor">#26A60E</color>
     <color name="darkGreenColor">#135307</color>
     <color name="darkColor">#303030</color>
     <color name="lightColor">#F6F6F6</color>
     <color name="errorColor">#ff3333</color>
+    <color name="darkErrorColor">#AE1F1F</color>
+
+
+    <color name="chip_color">#FFE5E5E5</color>
+    <color name="selected_chip_color">#6B26A60E</color>
 
 </resources>

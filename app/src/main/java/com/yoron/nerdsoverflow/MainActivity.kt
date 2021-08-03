@@ -10,11 +10,14 @@ package com.yoron.nerdsoverflow
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.yoron.nerdsoverflow.activities.DetailsActivity
 import com.yoron.nerdsoverflow.authActivities.LoginActivity
 import com.yoron.nerdsoverflow.mainFragments.HomeFragment
+import com.yoron.nerdsoverflow.viewModels.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -22,6 +25,8 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity() {
     private val auth = Firebase.auth
     private  val homeFragment: HomeFragment = HomeFragment()
+
+    private val mainViewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,14 +36,28 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, LoginActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             return
         }
-        setContentView(R.layout.activity_main)
+        mainViewModel.checkForDetails()
+        mainViewModel.hasDetails.observe(this){ hasDetails ->
+
+            if (!hasDetails) {
+                val intent = Intent(this, DetailsActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            }else{
+                setContentView(R.layout.activity_main)
+                supportFragmentManager.beginTransaction().add(mainActivityContainer.id, homeFragment)
+                    .commit()
+            }
 
 
-        supportFragmentManager.beginTransaction().add(mainActivityContainer.id, homeFragment)
-            .commitAllowingStateLoss()
+        }
+
+
+
 
 
     }

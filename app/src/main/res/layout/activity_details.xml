@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~
+  ~ Created by Obaida Al Mostarihi on 7/26/21, 1:25 AM
+  ~ Copyright (c) 2021 . All rights reserved.
+  ~ Last modified 7/26/21, 1:25 AM
+  ~
+  -->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/lightColor"
+
+    tools:context=".activities.DetailsActivity">
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/programmingLanguagesRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+     />
+
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/detailsSubmitFab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        android:text="Submit"
+        android:textSize="13sp"
+        android:textColor="@color/darkColor"
+        app:iconTint="@color/darkColor"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        app:icon="@drawable/ic_right_arrow"
+        app:iconGravity="end"
+         />
+</RelativeLayout>

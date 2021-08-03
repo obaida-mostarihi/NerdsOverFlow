@@ -8,57 +8,102 @@
 
 package com.yoron.nerdsoverflow.viewModels
 
+import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.facebook.litho.EventHandler
+import com.facebook.litho.*
+import com.facebook.litho.sections.SectionContext
+import com.facebook.litho.sections.widget.RecyclerCollectionComponent
+import com.google.firebase.firestore.DocumentSnapshot
+import com.yoron.nerdsoverflow.R
 import com.yoron.nerdsoverflow.classes.DataOrException
+import com.yoron.nerdsoverflow.java.OnCodeClickEvent
+import com.yoron.nerdsoverflow.java.OnPostClickedEvent
 import com.yoron.nerdsoverflow.java.fullPost.AnswersEvent
+import com.yoron.nerdsoverflow.java.fullPost.FullPostDiffSection
 import com.yoron.nerdsoverflow.java.home.HomePostsEvent
 import com.yoron.nerdsoverflow.models.AnswerModel
 import com.yoron.nerdsoverflow.repositories.AnswersRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.android.synthetic.main.fragment_home.view.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class AnswersViewModel @Inject constructor(
     private val repo: AnswersRepository
-) : ViewModel() {
-    private var answersPostsLoadingEventHandler: EventHandler<AnswersEvent>? = null
-
-    fun registerLoadingEvent(answersPostsLoadingEventHandler: EventHandler<AnswersEvent>?) {
-        this.answersPostsLoadingEventHandler = answersPostsLoadingEventHandler
-    }
+) : LithoViewModel<AnswersEvent>() {
 
 
-    fun unregisterLoadingEvent() {
-        answersPostsLoadingEventHandler = null
-    }
-
-
+    private lateinit var fullAnswerListeners: FullAnswerListeners
 
 
     private val _answers = MutableLiveData<answersDataOrException>()
     val answers: LiveData<answersDataOrException> = _answers
 
 
-    fun getAnswers(postId: String) {
+    fun loadAnswers(postId: String) {
         viewModelScope.launch {
-            repo.getAnswers(null, postId) {answersDataOrException ->
+            repo.getAnswers(null, postId) { answersDataOrException ->
                 _answers.postValue(answersDataOrException)
-                val answersEvent  =
+                val answersEvent =
                     AnswersEvent()
                 answersEvent.answers = answersDataOrException
                 answersEvent.isEmpty = answersDataOrException.data?.isEmpty() ?: true
                 answersEvent.isFirstLoad = true
 
-                answersPostsLoadingEventHandler?.dispatchEvent(answersEvent)
+                getLoadingEvent()?.dispatchEvent(answersEvent)
             }
         }
     }
 
 
+    /**
+     * Load more posts by passing the last post's document snapshot
+     * @param documentSnapshot pass the last post's document snapshot
+     */
+    fun loadMoreAnswers(documentSnapshot: DocumentSnapshot?, postId: String) {
+        if (documentSnapshot != null)
+            viewModelScope.launch {
+                repo.getAnswers(documentSnapshot, postId) { dataOrException ->
+                    _answers.value?.data =
+                        _answers.value?.data.orEmpty() + dataOrException.data.orEmpty()
+                    val answersEvent =
+                        AnswersEvent()
+                    answersEvent.answers = _answers.value!!
+                    answersEvent.isEmpty = dataOrException.data?.isEmpty() ?: true
+                    answersEvent.isFirstLoad = false
+
+                    getLoadingEvent()?.dispatchEvent(answersEvent)
+                }
+
+            }
+    }
+
+
+    fun setFullAnswerListeners(fullAnswerListeners: FullAnswerListeners) {
+        this.fullAnswerListeners = fullAnswerListeners
+    }
+
+
+    private val hasCodeEventDispatcher = HasEventDispatcher {
+        EventDispatcher { _, eventState ->
+            val code = (eventState as OnCodeClickEvent).code
+            fullAnswerListeners.onCodeClicked(code)
+            null
+        }
+    }
+
+    val onCodeClickEventEventHandler: EventHandler<OnCodeClickEvent> =
+        EventHandler(hasCodeEventDispatcher, 1, null)
+
+}//Class
+
+
+interface FullAnswerListeners {
+    fun onCodeClicked(code: String) {}
 }
 typealias answersDataOrException = DataOrException<List<AnswerModel>, Exception>

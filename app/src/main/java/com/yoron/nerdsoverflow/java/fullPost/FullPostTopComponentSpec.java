@@ -8,13 +8,21 @@
 
 package com.yoron.nerdsoverflow.java.fullPost;
 
+import android.view.View;
+
+import com.facebook.litho.ClickEvent;
 import com.facebook.litho.Component;
 import com.facebook.litho.ComponentContext;
 import com.facebook.litho.Column;
+import com.facebook.litho.EventHandler;
+import com.facebook.litho.LongClickEvent;
 import com.facebook.litho.Row;
+import com.facebook.litho.annotations.FromEvent;
 import com.facebook.litho.annotations.LayoutSpec;
 import com.facebook.litho.annotations.OnCreateInitialState;
 import com.facebook.litho.annotations.OnCreateLayout;
+import com.facebook.litho.annotations.OnEvent;
+import com.facebook.litho.annotations.Param;
 import com.facebook.litho.annotations.Prop;
 import com.facebook.litho.widget.Image;
 import com.facebook.litho.widget.SolidColor;
@@ -24,10 +32,11 @@ import com.facebook.yoga.YogaEdge;
 import com.facebook.yoga.YogaPositionType;
 import com.yoron.nerdsoverflow.R;
 import com.yoron.nerdsoverflow.java.CodeComponentView;
+import com.yoron.nerdsoverflow.java.OnCodeClickEvent;
 import com.yoron.nerdsoverflow.java.UserImageNameComponent;
 import com.yoron.nerdsoverflow.models.HomePostModel;
 
-@LayoutSpec
+@LayoutSpec(events = OnCodeClickEvent.class)
 class FullPostTopComponentSpec {
 
 
@@ -35,7 +44,6 @@ class FullPostTopComponentSpec {
     static Component onCreateLayout(ComponentContext c,
                                     @Prop HomePostModel post
     ) {
-        // TODO: describe your UI with existing components https://fblitho.com/docs/layout-specs
         return Column.create(c)
                 .child(
                         Text.create(c)
@@ -52,6 +60,7 @@ class FullPostTopComponentSpec {
                                 .marginDip(YogaEdge.TOP, 16)
                                 .textSizeSp(14)
                                 .alpha(0.9f)
+                                .textColorRes(R.color.darkColor)
                                 .extraSpacingDip(3)
 
                 )
@@ -62,12 +71,16 @@ class FullPostTopComponentSpec {
                                         .widthPercent(100)
                                         .heightDip(100)
                                         .marginDip(YogaEdge.TOP , 16)
+                                        .clickable(true)
                         ).child(
                                 Image.create(c)
                                         .drawableRes(R.drawable.ic_fullscreen)
                                         .positionType(YogaPositionType.ABSOLUTE)
                                         .alignSelf(YogaAlign.FLEX_END)
                                         .clickable(true)
+                                        .foregroundAttr(android.R.attr.selectableItemBackgroundBorderless)
+
+                                        .clickHandler(FullPostTopComponent.onCodeClicked(c , post.getCode()))
                         )
 
 
@@ -86,6 +99,14 @@ class FullPostTopComponentSpec {
                 )
                 .build();
     }
+
+    @OnEvent(ClickEvent.class)
+    static void onCodeClicked(ComponentContext c, @FromEvent View view , @Param String code) {
+        EventHandler handler = FullPostTopComponent.getOnCodeClickEventHandler(c);
+        if(handler != null)
+        FullPostTopComponent.dispatchOnCodeClickEvent(handler , code);
+    }
+
     private static Row.Builder getUserRow(ComponentContext c , HomePostModel post){
         Row.Builder userImageNameAnsweredRowBuilder = Row.create(c).widthPercent(100);
         userImageNameAnsweredRowBuilder.child(
