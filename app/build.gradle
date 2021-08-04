@@ -127,6 +127,7 @@ dependencies {
 
     //Code view
     implementation 'com.github.tiagohm:CodeView:0.4.0'
+    implementation 'me.testica:codeeditor:1.0.2'
 
     //layouts
     implementation 'com.google.android.flexbox:flexbox:3.0.0'

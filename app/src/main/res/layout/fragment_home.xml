@@ -7,13 +7,14 @@
   ~
   -->
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".mainFragments.HomeFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".main_fragments.HomeFragment">
 
-    <com.yoron.nerdsoverflow.customViews.CustomBottomSheet
+    <com.yoron.nerdsoverflow.custom_views.CustomBottomSheet
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/customBottomSheet"
@@ -27,7 +28,7 @@
            android:tag="content"
            />
 
-    </com.yoron.nerdsoverflow.customViews.CustomBottomSheet>
+    </com.yoron.nerdsoverflow.custom_views.CustomBottomSheet>
 
     <com.facebook.litho.LithoView
         android:id="@+id/lithoView"
@@ -35,4 +36,17 @@
         android:layout_height="match_parent"
         />
 
-</FrameLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/mainPostingFab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:src="@drawable/ic_post_add"
+        app:tint="@color/lightColor"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

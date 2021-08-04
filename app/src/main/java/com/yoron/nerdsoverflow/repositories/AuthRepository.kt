@@ -10,7 +10,7 @@ package com.yoron.nerdsoverflow.repositories
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthException
-import com.yoron.nerdsoverflow.viewModels.AuthDataOrException
+import com.yoron.nerdsoverflow.view_models.AuthDataOrException
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 import javax.inject.Named

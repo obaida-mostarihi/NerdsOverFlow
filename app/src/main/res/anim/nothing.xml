@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~
+  ~ Created by Obaida Al Mostarihi on 8/3/21, 10:10 AM
+  ~ Copyright (c) 2021 . All rights reserved.
+  ~ Last modified 8/3/21, 10:10 AM
+  ~
+  -->
+
+<translate xmlns:android="http://schemas.android.com/apk/res/android"
+    android:duration="300"
+    android:fromYDelta="0%p"
+    android:toYDelta="0%p" />

@@ -10,23 +10,18 @@ package com.yoron.nerdsoverflow.models
 
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentId
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.ServerTimestamp
 
 data class HomePostModel(
     @DocumentId
     val postId: String? = "",
-    val uid: String? = "",
+    val userReference: DocumentReference? = null,
     val title: String? = "",
     val question:String? = "",
-    val code: String? = """private void main(){
-        |//comment
-        |int number = 0;
-        |for(number in numbers){
-        |
-        |
-        |}
-        |}""".trimMargin(),
+    val code: String? = null,
+    val language:String? = "Java",
     val answered: Boolean? = false,
     @ServerTimestamp
     val timestamp: Timestamp? = null,

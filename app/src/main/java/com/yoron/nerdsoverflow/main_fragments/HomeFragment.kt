@@ -6,11 +6,10 @@
  *
  */
 
-package com.yoron.nerdsoverflow.mainFragments
+package com.yoron.nerdsoverflow.main_fragments
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,16 +21,14 @@ import com.facebook.litho.sections.SectionContext
 import com.facebook.litho.sections.widget.RecyclerCollectionComponent
 import com.yoron.nerdsoverflow.R
 import com.yoron.nerdsoverflow.activities.FullScreenCodeActivity
-import com.yoron.nerdsoverflow.java.OnPostClickedEvent
+import com.yoron.nerdsoverflow.activities.PostingActivity
 import com.yoron.nerdsoverflow.java.fullPost.FullPostDiffSection
 import com.yoron.nerdsoverflow.java.home.HomePostsDiffSectionSection
-import com.yoron.nerdsoverflow.models.AnswerModel
 import com.yoron.nerdsoverflow.models.HomePostModel
-import com.yoron.nerdsoverflow.models.UserModel
-import com.yoron.nerdsoverflow.viewModels.AnswersViewModel
-import com.yoron.nerdsoverflow.viewModels.FullAnswerListeners
-import com.yoron.nerdsoverflow.viewModels.HomePostListeners
-import com.yoron.nerdsoverflow.viewModels.HomePostsViewModel
+import com.yoron.nerdsoverflow.view_models.AnswersViewModel
+import com.yoron.nerdsoverflow.view_models.FullAnswerListeners
+import com.yoron.nerdsoverflow.view_models.HomePostListeners
+import com.yoron.nerdsoverflow.view_models.HomePostsViewModel
 import kotlinx.android.synthetic.main.fragment_home.view.*
 
 
@@ -67,6 +64,7 @@ class HomeFragment : Fragment(), HomePostListeners, FullAnswerListeners {
                     )
                     .clipToPadding(false)
                     .clipChildren(false)
+                    .bottomPaddingDip(100f)
                     .refreshProgressBarColor(
                         ContextCompat.getColor(
                             requireActivity(),
@@ -79,6 +77,13 @@ class HomeFragment : Fragment(), HomePostListeners, FullAnswerListeners {
                 .build()
 
 
+        view.mainPostingFab.setOnClickListener{
+
+            val intent = Intent(requireContext(), PostingActivity::class.java)
+            startActivity(intent)
+            requireActivity().overridePendingTransition(R.anim.bottom_up, R.anim.nothing);
+
+        }
 
 
         view.lithoView.componentTree = mComponentTree

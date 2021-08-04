@@ -16,16 +16,20 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Inject
 import javax.inject.Named
 
 @InstallIn(SingletonComponent::class)
 @Module
 object HomeModule {
 
+    @Named(value = "posts")
+    @Provides
+    fun provideFirestorePosts(): CollectionReference = Firebase.firestore.collection("Posts")
+
+
     @Named(value = "postsRef")
     @Provides
-    fun provideFirestorePostRef(): Query = Firebase.firestore.collection("Posts").limit(12)
+    fun provideFirestorePostRef(): Query = Firebase.firestore.collection("Posts").orderBy("timestamp" , Query.Direction.DESCENDING).limit(12)
 
     @Named(value = "answersCollection")
     @Provides

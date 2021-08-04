@@ -8,7 +8,6 @@
 
 package com.yoron.nerdsoverflow.java.home;
 
-import android.util.Log;
 import android.view.View;
 
 import com.facebook.litho.ClickEvent;
@@ -46,7 +45,7 @@ import com.yoron.nerdsoverflow.classes.DataOrException;
 
 import com.yoron.nerdsoverflow.java.OnPostClickedEvent;
 import com.yoron.nerdsoverflow.models.HomePostModel;
-import com.yoron.nerdsoverflow.viewModels.HomePostsViewModel;
+import com.yoron.nerdsoverflow.view_models.HomePostsViewModel;
 
 import java.util.Collections;
 import java.util.List;

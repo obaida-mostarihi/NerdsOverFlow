@@ -44,70 +44,72 @@ class FullPostTopComponentSpec {
     static Component onCreateLayout(ComponentContext c,
                                     @Prop HomePostModel post
     ) {
-        return Column.create(c)
-                .child(
-                        Text.create(c)
-                                .text(post.getTitle())
-                                .textSizeSp(18)
-                                .textColorRes(R.color.darkColor)
-                                .marginDip(YogaEdge.HORIZONTAL, 16)
-                                .extraSpacingDip(3)
+        Column.Builder builder = Column.create(c);
 
-                )
-                .child(
-                        Text.create(c)
-                                .text(post.getQuestion())
+        builder.child(
+                Text.create(c)
+                        .text(post.getTitle())
+                        .textSizeSp(18)
+                        .textColorRes(R.color.darkColor)
+                        .marginDip(YogaEdge.HORIZONTAL, 16)
+                        .extraSpacingDip(3)
+        );
+
+        builder.child(
+                Text.create(c)
+                        .text(post.getQuestion())
+                        .marginDip(YogaEdge.TOP, 16)
+                        .textSizeSp(14)
+                        .alpha(0.9f)
+                        .textColorRes(R.color.darkColor)
+                        .extraSpacingDip(3)
+
+        );
+
+        if(post.getCode()!=null && !post.getCode().isEmpty())
+        builder.child(
+                Column.create(c).child(
+                        CodeComponentView.create(c)
+                                .code(post.getCode())
+                                .widthPercent(100)
+                                .heightDip(100)
                                 .marginDip(YogaEdge.TOP, 16)
-                                .textSizeSp(14)
-                                .alpha(0.9f)
-                                .textColorRes(R.color.darkColor)
-                                .extraSpacingDip(3)
-
+                                .clickable(true)
+                ).child(
+                        Image.create(c)
+                                .drawableRes(R.drawable.ic_fullscreen)
+                                .positionType(YogaPositionType.ABSOLUTE)
+                                .alignSelf(YogaAlign.FLEX_END)
+                                .clickable(true)
+                                .foregroundAttr(android.R.attr.selectableItemBackgroundBorderless)
+                                .clickHandler(FullPostTopComponent.onCodeClicked(c, post.getCode()))
                 )
-                .child(
-                        Column.create(c).child(
-                                CodeComponentView.create(c)
-                                        .code(post.getCode())
-                                        .widthPercent(100)
-                                        .heightDip(100)
-                                        .marginDip(YogaEdge.TOP , 16)
-                                        .clickable(true)
-                        ).child(
-                                Image.create(c)
-                                        .drawableRes(R.drawable.ic_fullscreen)
-                                        .positionType(YogaPositionType.ABSOLUTE)
-                                        .alignSelf(YogaAlign.FLEX_END)
-                                        .clickable(true)
-                                        .foregroundAttr(android.R.attr.selectableItemBackgroundBorderless)
+        );
 
-                                        .clickHandler(FullPostTopComponent.onCodeClicked(c , post.getCode()))
-                        )
-
-
-                )
-                .child(
-                        getUserRow(c , post)
-                        .marginDip(YogaEdge.TOP , 16)
-                )
+        builder.child(
+                getUserRow(c, post)
+                        .marginDip(YogaEdge.TOP, 16)
+        )
                 .child(
                         SolidColor.create(c)
                                 .colorRes(R.color.darkColor)
                                 .widthPercent(100)
                                 .heightDip(0.5f)
                                 .alpha(0.3f)
-                                .marginDip(YogaEdge.TOP , 10)
-                )
+                                .marginDip(YogaEdge.TOP, 10)
+                );
+        return builder
                 .build();
     }
 
     @OnEvent(ClickEvent.class)
-    static void onCodeClicked(ComponentContext c, @FromEvent View view , @Param String code) {
+    static void onCodeClicked(ComponentContext c, @FromEvent View view, @Param String code) {
         EventHandler handler = FullPostTopComponent.getOnCodeClickEventHandler(c);
-        if(handler != null)
-        FullPostTopComponent.dispatchOnCodeClickEvent(handler , code);
+        if (handler != null)
+            FullPostTopComponent.dispatchOnCodeClickEvent(handler, code);
     }
 
-    private static Row.Builder getUserRow(ComponentContext c , HomePostModel post){
+    private static Row.Builder getUserRow(ComponentContext c, HomePostModel post) {
         Row.Builder userImageNameAnsweredRowBuilder = Row.create(c).widthPercent(100);
         userImageNameAnsweredRowBuilder.child(
                 UserImageNameComponent.create(c).user(post.getUser())

@@ -6,9 +6,9 @@
  *
  */
 
-package com.yoron.nerdsoverflow.customViews
+package com.yoron.nerdsoverflow.custom_views
 
-import android.R
+import android.annotation.SuppressLint
 import android.content.Context
 import android.media.MediaPlayer
 import android.os.Handler
@@ -37,6 +37,7 @@ class CoderWriterView constructor(context: Context , attrs: AttributeSet): AppCo
     private val mHandler: Handler = Handler()
              var loopCursor = true
     private val mCharacterAdder: Runnable = object : Runnable {
+        @SuppressLint("SetTextI18n")
         override fun run() {
             if (animating) {
                 text = mText!!.subSequence(0, mIndex++).toString() + "_"

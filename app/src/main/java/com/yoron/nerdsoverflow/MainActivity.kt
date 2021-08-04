@@ -15,9 +15,10 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.yoron.nerdsoverflow.activities.DetailsActivity
-import com.yoron.nerdsoverflow.authActivities.LoginActivity
-import com.yoron.nerdsoverflow.mainFragments.HomeFragment
-import com.yoron.nerdsoverflow.viewModels.MainViewModel
+import com.yoron.nerdsoverflow.activities.PostingActivity
+import com.yoron.nerdsoverflow.auth_activities.LoginActivity
+import com.yoron.nerdsoverflow.main_fragments.HomeFragment
+import com.yoron.nerdsoverflow.view_models.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -47,15 +48,14 @@ class MainActivity : AppCompatActivity() {
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(intent)
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-            }else{
-                setContentView(R.layout.activity_main)
-                supportFragmentManager.beginTransaction().add(mainActivityContainer.id, homeFragment)
-                    .commit()
             }
 
 
         }
 
+        setContentView(R.layout.activity_main)
+        supportFragmentManager.beginTransaction().add(mainActivityContainer.id, homeFragment)
+            .commit()
 
 
 

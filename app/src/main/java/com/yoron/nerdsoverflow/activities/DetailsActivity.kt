@@ -12,7 +12,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import androidx.activity.viewModels
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.ConcatAdapter
@@ -27,7 +26,7 @@ import com.yoron.nerdsoverflow.adapters.DetailsHeaderAdapter
 import com.yoron.nerdsoverflow.adapters.ProgrammingLanguagesAdapter
 import com.yoron.nerdsoverflow.dialogs.LoadingDialog
 import com.yoron.nerdsoverflow.models.ProgrammingLanguageModel
-import com.yoron.nerdsoverflow.viewModels.DetailsViewModel
+import com.yoron.nerdsoverflow.view_models.DetailsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_details.*
 import org.aviran.cookiebar2.CookieBar
@@ -36,7 +35,7 @@ import org.aviran.cookiebar2.CookieBar
 @AndroidEntryPoint
 class DetailsActivity : FragmentActivity(), ProgrammingLanguagesAdapter.SelectedLanguagesListener {
 
-    val detailsViewModel: DetailsViewModel by viewModels()
+    private val detailsViewModel: DetailsViewModel by viewModels()
     private lateinit var programmingLanguagesAdapter: ProgrammingLanguagesAdapter
     private lateinit var headerAdapter: DetailsHeaderAdapter
 

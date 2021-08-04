@@ -8,8 +8,6 @@
 
 package com.yoron.nerdsoverflow.java.fullPost;
 
-import android.util.Log;
-
 import com.facebook.litho.Column;
 import com.facebook.litho.EventHandler;
 import com.facebook.litho.StateValue;
@@ -40,10 +38,9 @@ import com.facebook.yoga.YogaAlign;
 import com.facebook.yoga.YogaEdge;
 import com.yoron.nerdsoverflow.classes.DataOrException;
 import com.yoron.nerdsoverflow.java.OnCodeClickEvent;
-import com.yoron.nerdsoverflow.java.home.HomePostsDiffSectionSection;
 import com.yoron.nerdsoverflow.models.AnswerModel;
 import com.yoron.nerdsoverflow.models.HomePostModel;
-import com.yoron.nerdsoverflow.viewModels.AnswersViewModel;
+import com.yoron.nerdsoverflow.view_models.AnswersViewModel;
 
 
 import java.util.Collections;

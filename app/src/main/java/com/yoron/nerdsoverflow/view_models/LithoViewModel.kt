@@ -6,14 +6,13 @@
  *
  */
 
-package com.yoron.nerdsoverflow.viewModels
+package com.yoron.nerdsoverflow.view_models
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.facebook.litho.ComponentTree
 import com.facebook.litho.EventHandler
 import com.facebook.litho.StateHandler
-import com.yoron.nerdsoverflow.java.home.HomePostsEvent
 
 /**
  * A ViewModel that contains everything we need to store (State , event handler).

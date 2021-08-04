@@ -6,14 +6,13 @@
  *
  */
 
-package com.yoron.nerdsoverflow.viewModels
+package com.yoron.nerdsoverflow.view_models
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.AuthResult
-import com.google.firebase.auth.FirebaseAuthException
 import com.yoron.nerdsoverflow.classes.DataOrException
 import com.yoron.nerdsoverflow.repositories.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel

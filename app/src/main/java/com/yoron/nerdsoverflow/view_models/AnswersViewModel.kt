@@ -6,29 +6,18 @@
  *
  */
 
-package com.yoron.nerdsoverflow.viewModels
+package com.yoron.nerdsoverflow.view_models
 
-import android.view.View
-import androidx.core.content.ContextCompat
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.facebook.litho.*
-import com.facebook.litho.sections.SectionContext
-import com.facebook.litho.sections.widget.RecyclerCollectionComponent
 import com.google.firebase.firestore.DocumentSnapshot
-import com.yoron.nerdsoverflow.R
 import com.yoron.nerdsoverflow.classes.DataOrException
 import com.yoron.nerdsoverflow.java.OnCodeClickEvent
-import com.yoron.nerdsoverflow.java.OnPostClickedEvent
 import com.yoron.nerdsoverflow.java.fullPost.AnswersEvent
-import com.yoron.nerdsoverflow.java.fullPost.FullPostDiffSection
-import com.yoron.nerdsoverflow.java.home.HomePostsEvent
 import com.yoron.nerdsoverflow.models.AnswerModel
 import com.yoron.nerdsoverflow.repositories.AnswersRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.android.synthetic.main.fragment_home.view.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -42,7 +31,6 @@ class AnswersViewModel @Inject constructor(
 
 
     private val _answers = MutableLiveData<answersDataOrException>()
-    val answers: LiveData<answersDataOrException> = _answers
 
 
     fun loadAnswers(postId: String) {

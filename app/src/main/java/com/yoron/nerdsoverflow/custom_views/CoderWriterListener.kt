@@ -6,7 +6,7 @@
  *
  */
 
-package com.yoron.nerdsoverflow.customViews
+package com.yoron.nerdsoverflow.custom_views
 
 interface CoderWriterListener {
     fun onTypingStart(text: String?)

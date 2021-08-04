@@ -15,7 +15,7 @@
 
     <fragment
         android:id="@+id/FirstFragment"
-        android:name="com.yoron.nerdsoverflow.authActivities.FirstFragment"
+        android:name="com.yoron.nerdsoverflow.auth_activities.FirstFragment"
         android:label="@string/first_fragment_label"
         tools:layout="@layout/fragment_first">
 
@@ -25,7 +25,7 @@
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
-        android:name="com.yoron.nerdsoverflow.authActivities.SecondFragment"
+        android:name="com.yoron.nerdsoverflow.auth_activities.SecondFragment"
         android:label="@string/second_fragment_label"
         tools:layout="@layout/fragment_second">
 

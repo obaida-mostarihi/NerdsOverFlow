@@ -6,7 +6,7 @@
  *
  */
 
-package com.yoron.nerdsoverflow.authActivities
+package com.yoron.nerdsoverflow.auth_activities
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -17,12 +17,12 @@ import androidx.lifecycle.Observer
 import com.google.firebase.auth.FirebaseAuthException
 import com.yoron.nerdsoverflow.MainActivity
 import com.yoron.nerdsoverflow.R
-import com.yoron.nerdsoverflow.customViews.CoderWriterView
+import com.yoron.nerdsoverflow.custom_views.CoderWriterView
 import com.yoron.nerdsoverflow.dialogs.LoadingDialog
-import com.yoron.nerdsoverflow.viewModels.AuthDataOrException
-import com.yoron.nerdsoverflow.viewModels.Error
-import com.yoron.nerdsoverflow.viewModels.ErrorType
-import com.yoron.nerdsoverflow.viewModels.LoginViewModel
+import com.yoron.nerdsoverflow.view_models.AuthDataOrException
+import com.yoron.nerdsoverflow.view_models.Error
+import com.yoron.nerdsoverflow.view_models.ErrorType
+import com.yoron.nerdsoverflow.view_models.LoginViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_login.*
 
@@ -118,11 +118,12 @@ class LoginActivity : AppCompatActivity() {
                         loginPasswordErrorTv,
                         "The password is invalid or the user does not have a password."
                     )
-                    else -> setTvError(loginEmailErrorTv, it.localizedMessage)
+                    else -> it.nonErrorMsg(loginEmailErrorTv)
+
 
                 }
             } catch (e: Exception) {
-                setTvError(loginEmailErrorTv, it.localizedMessage)
+                it.nonErrorMsg(loginEmailErrorTv)
             }
 
             return@Observer
@@ -132,18 +133,22 @@ class LoginActivity : AppCompatActivity() {
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
         finish()
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
 
     }
 
+    private fun Exception.nonErrorMsg(textView: CoderWriterView){
+        this.localizedMessage?.let { msg ->
+            setTvError(textView, msg)
+
+        }
+    }
     private fun loginErrorObserver() = Observer<Error> { error ->
         when (error.type) {
-            ErrorType.EMAIL -> {
-                setTvError(loginEmailErrorTv, error.exception.localizedMessage)
-            }
-            ErrorType.PASSWORD -> {
-                setTvError(loginPasswordErrorTv, error.exception.localizedMessage)
-            }
+            ErrorType.EMAIL -> error.exception.nonErrorMsg(loginEmailErrorTv)
+
+            ErrorType.PASSWORD -> error.exception.nonErrorMsg(loginPasswordErrorTv)
+
         }
     }
 

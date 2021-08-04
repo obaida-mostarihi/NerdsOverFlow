@@ -6,7 +6,7 @@
  *
  */
 
-package com.yoron.nerdsoverflow.viewModels
+package com.yoron.nerdsoverflow.view_models
 
 
 import androidx.lifecycle.LiveData

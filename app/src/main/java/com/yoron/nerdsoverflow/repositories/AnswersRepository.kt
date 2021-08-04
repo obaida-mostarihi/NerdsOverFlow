@@ -11,10 +11,8 @@ package com.yoron.nerdsoverflow.repositories
 import android.util.Log
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentSnapshot
-import com.yoron.nerdsoverflow.classes.DataOrException
 import com.yoron.nerdsoverflow.models.AnswerModel
-import com.yoron.nerdsoverflow.models.HomePostModel
-import com.yoron.nerdsoverflow.viewModels.answersDataOrException
+import com.yoron.nerdsoverflow.view_models.answersDataOrException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.tasks.await
@@ -52,7 +50,10 @@ class AnswersRepository @Inject constructor(
                 if (it == null)
                     dataOrException(dataOrExceptionVar)
                 else
-                    Log.v("loool", it.localizedMessage)
+                    it.localizedMessage?.let{ msg ->
+                        Log.v("loool", msg)
+
+                    }
 
             }
         }

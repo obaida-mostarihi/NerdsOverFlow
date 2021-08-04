@@ -6,7 +6,7 @@
  *
  */
 
-package com.yoron.nerdsoverflow.customViews;
+package com.yoron.nerdsoverflow.custom_views;
 
 
 import android.animation.ValueAnimator;
@@ -19,7 +19,6 @@ import android.graphics.Path;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -50,28 +49,27 @@ public class CustomBottomSheet extends LinearLayout {
 
     public CustomBottomSheet(@NonNull Context context) {
         super(context);
-        init(context);
+        init();
 
     }
 
     public CustomBottomSheet(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        init(context);
+        init();
 
 
     }
 
     public CustomBottomSheet(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init(context);
+        init();
     }
 
-    private void init(Context context) {
+    private void init() {
         //..
         DisplayMetrics displayMetrics = new DisplayMetrics();
         ((Activity) getContext()).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        int height = displayMetrics.heightPixels;
-        mCardMovement = height;
+        mCardMovement = displayMetrics.heightPixels;
 
         bottomSheetPaint = new Paint();
         paint = new Paint();
@@ -138,7 +136,7 @@ public class CustomBottomSheet extends LinearLayout {
             bottomSheetListener.bottomSheetState(true);
         ValueAnimator animator = ValueAnimator.ofFloat(mCardMovement, 0);
 //        ValueAnimator sidesAnimator = ValueAnimator.ofFloat(mSidesOffSets, 0f);
-        animate(animator, null);
+        animate(animator);
     }
 
     private void animateToCenter() {
@@ -148,7 +146,7 @@ public class CustomBottomSheet extends LinearLayout {
             bottomSheetListener.bottomSheetState(true);
         ValueAnimator animator = ValueAnimator.ofFloat(mCardMovement, (float) getMeasuredHeight() / 2);
 //        ValueAnimator sidesAnimator = ValueAnimator.ofFloat(mSidesOffSets,50f);
-        animate(animator, null);
+        animate(animator);
 
 
     }
@@ -158,25 +156,13 @@ public class CustomBottomSheet extends LinearLayout {
 
         ValueAnimator animator = ValueAnimator.ofFloat(mCardMovement, getMeasuredHeight());
 //        ValueAnimator sidesAnimator = ValueAnimator.ofFloat(mSidesOffSets,50f);
-        animate(animator, null);
+        animate(animator);
 
 
     }
 
 
-    private void animate(ValueAnimator animator, ValueAnimator sidesAnimator) {
-        if (sidesAnimator != null) {
-            sidesAnimator.addUpdateListener(animation -> {
-                Float value = (Float) animation.getAnimatedValue();
-
-                mSidesOffSets = (float) value;
-                getChildAt(0).layout(l + (int) mSidesOffSets, t + (int) mCardMovement, r - (int) mSidesOffSets, b + (int) mCardMovement);
-
-                postInvalidate();
-
-            });
-            sidesAnimator.start();
-        }
+    private void animate(ValueAnimator animator) {
         animator.addUpdateListener(animation -> {
             Float value = (Float) animation.getAnimatedValue();
 

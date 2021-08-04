@@ -9,11 +9,13 @@
 package com.yoron.nerdsoverflow.repositories
 
 import android.util.Log
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Query
 import com.yoron.nerdsoverflow.classes.DataOrException
 import com.yoron.nerdsoverflow.models.HomePostModel
-import com.yoron.nerdsoverflow.viewModels.HomePostsList
+import com.yoron.nerdsoverflow.models.UserModel
+import com.yoron.nerdsoverflow.view_models.HomePostsList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.tasks.await
@@ -42,7 +44,7 @@ class HomePostsRepository @Inject constructor(
                 try {
                     dataOrExceptionVar.data = query.get().await().mapNotNull { document ->
                         val model = document.toObject(HomePostModel::class.java)
-                        model.copy(documentSnapshot = document)
+                        model.copy(documentSnapshot = document,user = getUserDetails(model.userReference))
                     }
                 }catch (e: Exception){
                     dataOrExceptionVar.e = e
@@ -60,5 +62,13 @@ class HomePostsRepository @Inject constructor(
 
 
 
+    }
+
+    private suspend fun getUserDetails(userReference: DocumentReference?): UserModel? {
+
+        userReference?.let { ref ->
+            return ref.get().await().toObject(UserModel::class.java)
+        }
+        return UserModel()
     }
 }

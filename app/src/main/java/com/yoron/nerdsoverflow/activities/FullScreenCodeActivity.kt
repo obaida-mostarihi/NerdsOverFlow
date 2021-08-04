@@ -31,7 +31,9 @@ class FullScreenCodeActivity : AppCompatActivity() {
                 .setFontSize(14f)
                 .setWrapLine(true)
                 .setShowLineNumber(true)
-                .apply()
+                .setZoomEnabled(true)
+                .setShowLineNumber(true)
+                .setStartLineNumber(9000).apply()
         }
 
 

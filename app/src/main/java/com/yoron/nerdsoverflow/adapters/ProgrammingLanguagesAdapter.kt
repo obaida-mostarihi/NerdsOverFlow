@@ -8,26 +8,22 @@
 
 package com.yoron.nerdsoverflow.adapters
 
-import android.R.attr.button
-import android.app.Activity
+
 import android.content.Context
-import android.graphics.drawable.Animatable
-import android.graphics.drawable.AnimationDrawable
-import android.graphics.drawable.TransitionDrawable
+
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.chip.Chip
 import com.yoron.nerdsoverflow.R
 import com.yoron.nerdsoverflow.classes.toPx
 import com.yoron.nerdsoverflow.models.ProgrammingLanguageModel
 import kotlinx.android.synthetic.main.item_chip_category.view.*
 
 
-class ProgrammingLanguagesAdapter(var languages: ArrayList<ProgrammingLanguageModel>) :
+@Suppress("UNCHECKED_CAST")
+class ProgrammingLanguagesAdapter(var languages: ArrayList<ProgrammingLanguageModel> , val singleSelection: Boolean? = false) :
     RecyclerView.Adapter<ProgrammingLanguagesAdapter.ViewHolder>(), Filterable {
     private var filteredLanguages: ArrayList<ProgrammingLanguageModel> = ArrayList()
     private var selectedLanguages: ArrayList<ProgrammingLanguageModel> = ArrayList()
@@ -35,16 +31,18 @@ class ProgrammingLanguagesAdapter(var languages: ArrayList<ProgrammingLanguageMo
     private var selectedLanguagesListener: SelectedLanguagesListener? = null
     class ViewHolder(
         val context: Context,
-        private val view: View
+        private val view: View,
+        val singleSelection: Boolean?
         ) : RecyclerView.ViewHolder(view) {
 
 
         /**
          * setup all the chip function the click listener with setting the background color.
          */
-        fun setupChip(language: ProgrammingLanguageModel, onChipClicked: (Boolean) -> Unit) {
+        fun setupChip(language: ProgrammingLanguageModel,onChipSingleSelected: () -> Unit, onChipClicked: (Boolean) -> Unit) {
             view.chipItem.text = language.language
 
+            if (singleSelection != true)
             view.chipItem.setBackgroundResource(
                 if (language.selected == true) {
                     R.drawable.selected_chip_shape
@@ -55,18 +53,23 @@ class ProgrammingLanguagesAdapter(var languages: ArrayList<ProgrammingLanguageMo
 
 
             view.chipItem.setOnClickListener {
+
                 language.selected = language.selected != true
                 onChipClicked(language.selected!!)
-                view.chipItem.setBackgroundResource(
-                    if (language.selected == true) {
-                        R.drawable.selected_chip_shape
-                    } else {
-                        R.drawable.chip_shape
-                    }
-                )
+
+                if (singleSelection != true) {
+                    view.chipItem.setBackgroundResource(
+                        if (language.selected == true) {
+                            R.drawable.selected_chip_shape
+                        } else {
+                            R.drawable.chip_shape
+                        }
+                    )
 
 
-
+                }else{
+                    onChipSingleSelected()
+                }
 
             }
         }
@@ -77,7 +80,7 @@ class ProgrammingLanguagesAdapter(var languages: ArrayList<ProgrammingLanguageMo
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_chip_category, parent, false)
 
-        return ViewHolder(parent.context, view)
+        return ViewHolder(parent.context, view ,singleSelection)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -93,7 +96,10 @@ class ProgrammingLanguagesAdapter(var languages: ArrayList<ProgrammingLanguageMo
         }
 
 
-        holder.setupChip(language = filteredLanguages[position]){ isSelected ->
+        holder.setupChip(language = filteredLanguages[position],onChipSingleSelected = {
+            filteredLanguages[position].language?.let { selectedLanguagesListener?.selectedItem(it) }
+
+        }){ isSelected ->
             if (isSelected){
                 selectedLanguages.add(filteredLanguages[position])
             }else{
@@ -157,6 +163,7 @@ class ProgrammingLanguagesAdapter(var languages: ArrayList<ProgrammingLanguageMo
     }
 
     interface SelectedLanguagesListener{
-        fun selectedList(selectedLanguages: ArrayList<ProgrammingLanguageModel>)
+        fun selectedList(selectedLanguages: ArrayList<ProgrammingLanguageModel>){}
+        fun selectedItem(selectedItem: String){}
     }
 }
