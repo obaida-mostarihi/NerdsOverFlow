@@ -12,6 +12,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.yoron.nerdsoverflow.classes.DataOrException
+import com.yoron.nerdsoverflow.models.UserModel
 import com.yoron.nerdsoverflow.repositories.MainRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -22,8 +24,8 @@ class MainViewModel @Inject constructor(
     val repo: MainRepository
 ) : ViewModel() {
 
-    private val _hasDetails = MutableLiveData<Boolean>()
-    val hasDetails: LiveData<Boolean> = _hasDetails
+    private val _hasDetails = MutableLiveData<DataOrException<UserModel, Exception>>()
+    val hasDetails: LiveData<DataOrException<UserModel, Exception>> = _hasDetails
 
 
     fun checkForDetails(){

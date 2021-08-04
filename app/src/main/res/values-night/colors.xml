@@ -13,5 +13,6 @@
     <color name="darkColor">#D6D6D6</color>
     <color name="lightColor">#303030</color>
     <color name="errorColor">#ff3333</color>
+    <color name="shadowColor">#57FFFFFF</color>
 
 </resources>

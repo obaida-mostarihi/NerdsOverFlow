@@ -23,6 +23,10 @@
     <color name="darkErrorColor">#AE1F1F</color>
 
 
+    <color name="shadowColor">#60303030</color>
+
+
+
     <color name="chip_color">#FFE5E5E5</color>
     <color name="selected_chip_color">#6B26A60E</color>
 

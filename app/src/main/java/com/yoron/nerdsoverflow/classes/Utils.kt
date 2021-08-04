@@ -9,7 +9,16 @@
 package com.yoron.nerdsoverflow.classes
 
 import android.content.res.Resources
+import com.facebook.drawee.generic.RoundingParams
+import com.facebook.drawee.view.SimpleDraweeView
 
 
 fun Float.toDp(): Float = (this / Resources.getSystem().displayMetrics.density)
 fun Float.toPx(): Float = (this * Resources.getSystem().displayMetrics.density)
+
+
+private fun roundingParams() = RoundingParams.asCircle()
+
+fun SimpleDraweeView.asCircle(){
+    this.hierarchy.roundingParams = roundingParams()
+}

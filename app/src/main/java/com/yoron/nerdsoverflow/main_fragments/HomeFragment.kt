@@ -19,6 +19,7 @@ import androidx.fragment.app.activityViewModels
 import com.facebook.litho.*
 import com.facebook.litho.sections.SectionContext
 import com.facebook.litho.sections.widget.RecyclerCollectionComponent
+import com.facebook.yoga.YogaEdge
 import com.yoron.nerdsoverflow.R
 import com.yoron.nerdsoverflow.activities.FullScreenCodeActivity
 import com.yoron.nerdsoverflow.activities.PostingActivity
@@ -30,6 +31,7 @@ import com.yoron.nerdsoverflow.view_models.FullAnswerListeners
 import com.yoron.nerdsoverflow.view_models.HomePostListeners
 import com.yoron.nerdsoverflow.view_models.HomePostsViewModel
 import kotlinx.android.synthetic.main.fragment_home.view.*
+import kotlinx.android.synthetic.main.full_post_layout.view.*
 
 
 class HomeFragment : Fragment(), HomePostListeners, FullAnswerListeners {
@@ -62,9 +64,11 @@ class HomeFragment : Fragment(), HomePostListeners, FullAnswerListeners {
                             .onPostClickedEventHandler(homePostsViewModel.onPostClickEventEventHandler)
 
                     )
+                    .marginDip(YogaEdge.TOP , 30f)
                     .clipToPadding(false)
                     .clipChildren(false)
                     .bottomPaddingDip(100f)
+                    .topPaddingDip(15f)
                     .refreshProgressBarColor(
                         ContextCompat.getColor(
                             requireActivity(),

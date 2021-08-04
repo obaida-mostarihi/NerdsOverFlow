@@ -13,6 +13,7 @@ import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.ktx.Firebase
 import com.yoron.nerdsoverflow.classes.DataOrException
 import com.yoron.nerdsoverflow.models.ProgrammingLanguageModel
+import com.yoron.nerdsoverflow.models.UserModel
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 import javax.inject.Named
@@ -21,16 +22,25 @@ class MainRepository @Inject constructor(
     @Named("usersCollection")
     val usersCollection: CollectionReference
 ) {
-    suspend fun hasDetails(): Boolean {
+    suspend fun hasDetails(): DataOrException<UserModel , Exception> {
+        var dataOrException = DataOrException<UserModel , Exception>()
         Firebase.auth.currentUser?.let { user ->
             val userDetails = usersCollection.document(user.uid).get().await()
-            if (!userDetails.exists())
-                return false
-            if (userDetails.contains("username") && userDetails.contains("selectedLanguages"))
-                return true
+            if (!userDetails.exists()){
+                dataOrException.e = Exception("Not Found.")
+                return dataOrException
+            }
+
+            return if (userDetails.contains("username") && userDetails.contains("selectedLanguages")){
+                dataOrException.data = userDetails.toObject(UserModel::class.java)
+                dataOrException
+            }else{
+                dataOrException.e = Exception("Not Found.")
+                dataOrException
+            }
         }
 
-        return false
+        return dataOrException
     }
 
 

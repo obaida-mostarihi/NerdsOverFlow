@@ -49,23 +49,23 @@ public class CustomBottomSheet extends LinearLayout {
 
     public CustomBottomSheet(@NonNull Context context) {
         super(context);
-        init();
+        init(context);
 
     }
 
     public CustomBottomSheet(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        init();
+        init(context);
 
 
     }
 
     public CustomBottomSheet(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init();
+        init(context);
     }
 
-    private void init() {
+    private void init(Context context) {
         //..
         DisplayMetrics displayMetrics = new DisplayMetrics();
         ((Activity) getContext()).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -88,7 +88,7 @@ public class CustomBottomSheet extends LinearLayout {
         bottomSheetPaint.setStrokeWidth(10f);
         bottomSheetPaint.setColor(ContextCompat.getColor(getContext(), R.color.lightColor));
         paint.setColor(ContextCompat.getColor(getContext(), R.color.darkColor));
-        bottomSheetPaint.setShadowLayer(10, 0, 0, getResources().getColor(android.R.color.black));
+        bottomSheetPaint.setShadowLayer(10, 0, 0, getResources().getColor(R.color.shadowColor));
         paint.setAntiAlias(true);
         bottomSheetPaint.setAntiAlias(true);
         bottomSheetPath = new Path();
@@ -103,8 +103,8 @@ public class CustomBottomSheet extends LinearLayout {
 
     @Override
     protected void dispatchDraw(Canvas canvas) {
-        if (getChildAt(0) != null){
-            getChildAt(0).layout(l + (int) mSidesOffSets, (int) (t +  mCardMovement), r - (int) mSidesOffSets, (int) (b + mCardMovement));
+        if (getChildAt(0) != null) {
+            getChildAt(0).layout(l + (int) mSidesOffSets, (int) (t + mCardMovement), r - (int) mSidesOffSets, (int) (b + mCardMovement));
         }
 
         bottomSheetPath.reset();
@@ -134,7 +134,7 @@ public class CustomBottomSheet extends LinearLayout {
 
         if (bottomSheetListener != null)
             bottomSheetListener.bottomSheetState(true);
-        ValueAnimator animator = ValueAnimator.ofFloat(mCardMovement, 0);
+        ValueAnimator animator = ValueAnimator.ofFloat(mCardMovement, 0  + convertDpToPixel(60, getContext()));
 //        ValueAnimator sidesAnimator = ValueAnimator.ofFloat(mSidesOffSets, 0f);
         animate(animator);
     }
@@ -169,9 +169,8 @@ public class CustomBottomSheet extends LinearLayout {
             mCardMovement = (float) value;
 
 
-
-            if (getChildAt(0) != null){
-                getChildAt(0).layout(l + (int) mSidesOffSets, (int) (t +  value), r - (int) mSidesOffSets, (int) (b + value));
+            if (getChildAt(0) != null) {
+                getChildAt(0).layout(l + (int) mSidesOffSets, (int) (t + value), r - (int) mSidesOffSets, (int) (b + value));
             }
 
             postInvalidate();
@@ -272,6 +271,17 @@ public class CustomBottomSheet extends LinearLayout {
 
     }
 
+    /**
+     * This method converts dp unit to equivalent pixels, depending on device density.
+     *
+     * @param dp      A value in dp (density independent pixels) unit. Which we need to convert into pixels
+     * @param context Context to get resources and device specific display metrics
+     * @return A float value to represent px equivalent to dp depending on device density
+     */
+    public static float convertDpToPixel(float dp, Context context) {
+        return dp * ((float) context.getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT);
+    }
+
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -297,8 +307,8 @@ public class CustomBottomSheet extends LinearLayout {
 
                     else
                         animateToCenter();
-                }else{
-                    if(y<mCardMovement)
+                } else {
+                    if (y < mCardMovement)
                         animateToBottom();
                 }
                 return true;
@@ -306,7 +316,6 @@ public class CustomBottomSheet extends LinearLayout {
             case MotionEvent.ACTION_MOVE:
 
                 if (isTouchingTop) {
-
 
 
 //                    if(mCardMovement<=getMeasuredHeight()/2 && mCardMovement>=0){
