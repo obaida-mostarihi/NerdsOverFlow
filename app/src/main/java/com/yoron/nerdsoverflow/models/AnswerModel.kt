@@ -9,11 +9,13 @@
 package com.yoron.nerdsoverflow.models
 
 import com.google.firebase.Timestamp
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.ServerTimestamp
 
 data class AnswerModel(
     val user: UserModel? = null,
+    val userReference: DocumentReference? = null,
     val answer: String? = "",
     val code: String? = "",
     @ServerTimestamp

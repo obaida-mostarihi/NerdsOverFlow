@@ -68,6 +68,10 @@ class PostingActivity : AppCompatActivity() {
         )
 
 
+        postingBackButton.setOnClickListener {
+            onBackPressed()
+        }
+
         programmingLanguagesAdapter.setSelectionListener(object :
             ProgrammingLanguagesAdapter.SelectedLanguagesListener {
             override fun selectedItem(selectedItem: String) {

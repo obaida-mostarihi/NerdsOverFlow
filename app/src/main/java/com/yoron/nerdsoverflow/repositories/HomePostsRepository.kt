@@ -26,7 +26,7 @@ import javax.inject.Named
 class HomePostsRepository @Inject constructor(
     @Named(value = "postsRef")
     val homePostsQuery: Query
-) {
+): Repository() {
 
     suspend fun getPostsData(
         documentSnapshot: DocumentSnapshot? = null,
@@ -64,11 +64,5 @@ class HomePostsRepository @Inject constructor(
 
     }
 
-    private suspend fun getUserDetails(userReference: DocumentReference?): UserModel? {
 
-        userReference?.let { ref ->
-            return ref.get().await().toObject(UserModel::class.java)
-        }
-        return UserModel()
-    }
 }

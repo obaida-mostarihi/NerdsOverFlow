@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~
+  ~ Created by Obaida Al Mostarihi on 8/5/21, 10:33 AM
+  ~ Copyright (c) 2021 . All rights reserved.
+  ~ Last modified 8/5/21, 10:33 AM
+  ~
+  -->
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.AnsweringActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="100dp">
+
+            <ImageButton
+                android:id="@+id/answerBackButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:background="?android:selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_back_arrow"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/darkColor" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="Answering"
+                android:textColor="@color/darkColor"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="@+id/answerBackButton"
+                app:layout_constraintStart_toEndOf="@+id/answerBackButton"
+                app:layout_constraintTop_toTopOf="@+id/answerBackButton" />
+
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="16dp"
+                android:text="Answer*"
+                android:textColor="@color/darkColor"
+                android:textSize="13sp"
+                app:layout_constraintStart_toStartOf="@+id/answeringAnswerEt"
+                app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Code"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="16dp"
+
+                android:textColor="@color/darkColor"
+                android:textSize="13sp"
+                app:layout_constraintStart_toStartOf="@+id/answeringCode"
+                app:layout_constraintTop_toBottomOf="@+id/answeringAnswerEt" />
+
+            <EditText
+                android:id="@+id/answeringAnswerEt"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="3dp"
+                android:background="@drawable/edittext_shape"
+                android:hint="Start writing your Answer.."
+                android:inputType="textMultiLine"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView5" />
+
+            <me.testica.codeeditor.Editor
+                android:id="@+id/answeringCode"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:background="@color/darkColor"
+                android:textColor="@color/lightColor"
+                android:visibility="visible"
+                android:layout_marginTop="3dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView6"
+                app:textSize="16sp" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/answeringFab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:src="@drawable/ic_right_arrow"
+        app:tint="@color/lightColor"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

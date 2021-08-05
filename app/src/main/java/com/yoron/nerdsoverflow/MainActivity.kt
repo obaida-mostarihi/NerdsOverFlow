@@ -11,23 +11,27 @@ package com.yoron.nerdsoverflow
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.result.ActivityResult
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.yoron.nerdsoverflow.activities.DetailsActivity
-import com.yoron.nerdsoverflow.activities.PostingActivity
 import com.yoron.nerdsoverflow.auth_activities.LoginActivity
+import com.yoron.nerdsoverflow.classes.BetterActivityResult
 import com.yoron.nerdsoverflow.classes.asCircle
 import com.yoron.nerdsoverflow.main_fragments.HomeFragment
 import com.yoron.nerdsoverflow.view_models.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 
+
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private val auth = Firebase.auth
-    private  val homeFragment: HomeFragment = HomeFragment()
+    private lateinit var homeFragment: HomeFragment
+    private val activityLauncher: BetterActivityResult<Intent, ActivityResult> =
+        BetterActivityResult.registerActivityForResult(this)
 
     private val mainViewModel: MainViewModel by viewModels()
 
@@ -43,15 +47,15 @@ class MainActivity : AppCompatActivity() {
             return
         }
         setContentView(R.layout.activity_main)
-
+        homeFragment = HomeFragment(activityLauncher)
         mainViewModel.checkForDetails()
-        mainViewModel.hasDetails.observe(this){ dataOrException ->
+        mainViewModel.hasDetails.observe(this) { dataOrException ->
             if (dataOrException.e != null) {
                 val intent = Intent(this, DetailsActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(intent)
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-            }else{
+            } else {
                 dataOrException.data?.let { user ->
                     mainUserImage.asCircle()
                     mainUserImage.setImageURI(user.image)
@@ -63,18 +67,14 @@ class MainActivity : AppCompatActivity() {
 
 
         mainNotificationsButton.setOnClickListener {
-            Toast.makeText(this , "Coming soon!", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Coming soon!", Toast.LENGTH_LONG).show()
         }
 
         supportFragmentManager.beginTransaction().add(mainActivityContainer.id, homeFragment)
             .commit()
 
 
-
-
     }
-
-
 
 
 }

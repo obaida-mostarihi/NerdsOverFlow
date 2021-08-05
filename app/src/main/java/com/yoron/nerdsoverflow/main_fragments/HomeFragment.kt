@@ -8,11 +8,14 @@
 
 package com.yoron.nerdsoverflow.main_fragments
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -21,8 +24,10 @@ import com.facebook.litho.sections.SectionContext
 import com.facebook.litho.sections.widget.RecyclerCollectionComponent
 import com.facebook.yoga.YogaEdge
 import com.yoron.nerdsoverflow.R
+import com.yoron.nerdsoverflow.activities.AnsweringActivity
 import com.yoron.nerdsoverflow.activities.FullScreenCodeActivity
 import com.yoron.nerdsoverflow.activities.PostingActivity
+import com.yoron.nerdsoverflow.classes.BetterActivityResult
 import com.yoron.nerdsoverflow.java.fullPost.FullPostDiffSection
 import com.yoron.nerdsoverflow.java.home.HomePostsDiffSectionSection
 import com.yoron.nerdsoverflow.models.HomePostModel
@@ -34,7 +39,7 @@ import kotlinx.android.synthetic.main.fragment_home.view.*
 import kotlinx.android.synthetic.main.full_post_layout.view.*
 
 
-class HomeFragment : Fragment(), HomePostListeners, FullAnswerListeners {
+class HomeFragment(val activityLauncher: BetterActivityResult<Intent, ActivityResult>) : Fragment(), HomePostListeners, FullAnswerListeners {
 
     private var mComponentTree: ComponentTree? = null
     private var mFullPostComponentTree: ComponentTree? = null
@@ -128,6 +133,7 @@ class HomeFragment : Fragment(), HomePostListeners, FullAnswerListeners {
                         .clipChildren(false)
                         .focusable(true)
                         .disablePTR(true)
+                        .bottomPaddingDip(100f)
                         .refreshProgressBarColor(
                             ContextCompat.getColor(
                                 requireActivity(),
@@ -140,7 +146,28 @@ class HomeFragment : Fragment(), HomePostListeners, FullAnswerListeners {
                     .build()
             view.fullPostLithoView.componentTree = mFullPostComponentTree
 
+            view.homeAnswerFab.setOnClickListener {
+                val intent = Intent(requireContext() , AnsweringActivity::class.java)
+                intent.putExtra("postId" , post.postId)
+                post.postId?.let { id ->   startAnsweringActivity(intent , id)}
+
+                requireActivity().overridePendingTransition(R.anim.bottom_up, R.anim.nothing)
+            }
         }
     }
+
+
+    private fun startAnsweringActivity(intent: Intent , postId: String) = activityLauncher.launch(intent){ result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val data: Intent? = result.data
+            data?.let{
+                if(it.getBooleanExtra("answered" , false)){
+                    answersViewModel.loadAnswers(postId)
+                }
+            }
+        }
+    }
+
+
 
 }

@@ -49,6 +49,7 @@ class AnswerComponentSpec {
 
         Column.Builder builder = Column.create(c);
 
+        boolean hasCode = answerModel.getCode() != null && !answerModel.getCode().isEmpty();
         builder.child(
                 UserImageNameComponent.create(c)
                         .timestamp(answerModel.getDate())
@@ -62,9 +63,10 @@ class AnswerComponentSpec {
                         .textColorRes(R.color.darkColor)
                         .textSizeSp(14)
                         .alpha(0.9f)
+                        .marginDip(YogaEdge.BOTTOM , hasCode ? 0 : 16)
                         .extraSpacingDip(3)
         );
-        if (answerModel.getCode() != null) {
+        if (hasCode) {
                 builder.child(
                         Text.create(c)
                                 .text("See Code..")

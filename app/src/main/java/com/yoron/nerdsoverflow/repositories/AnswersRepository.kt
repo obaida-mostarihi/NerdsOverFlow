@@ -11,6 +11,7 @@ package com.yoron.nerdsoverflow.repositories
 import android.util.Log
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.Query
 import com.yoron.nerdsoverflow.models.AnswerModel
 import com.yoron.nerdsoverflow.view_models.answersDataOrException
 import kotlinx.coroutines.Dispatchers
@@ -23,34 +24,38 @@ import javax.inject.Named
 class AnswersRepository @Inject constructor(
     @Named(value = "answersCollection")
     private val postsCollection: CollectionReference
-) {
+): Repository(){
 
-    suspend fun getAnswers(documentSnapshot: DocumentSnapshot? = null,postId: String, dataOrException: (answersDataOrException) -> (Unit)){
+    suspend fun getAnswers(
+        documentSnapshot: DocumentSnapshot? = null,
+        postId: String,
+        dataOrException: (answersDataOrException) -> (Unit)
+    ) {
 
-        val dataOrExceptionVar =answersDataOrException()
+        val dataOrExceptionVar = answersDataOrException()
         val query = if (documentSnapshot == null) {
-            postsCollection.document(postId).collection("Answers").limit(10)
+            postsCollection.document(postId).collection("Answers").orderBy("date" , Query.Direction.DESCENDING).limit(10)
         } else {
-            postsCollection.document(postId).collection("Answers")
+            postsCollection.document(postId).collection("Answers").orderBy("date" , Query.Direction.DESCENDING)
                 .startAfter(documentSnapshot).limit(10)
         }
 
 
-        withContext(Dispatchers.Main){
+        withContext(Dispatchers.Main) {
             async {
                 try {
                     dataOrExceptionVar.data = query.get().await().mapNotNull { document ->
                         val model = document.toObject(AnswerModel::class.java)
-                        model.copy(documentSnapshot = document)
+                        model.copy(documentSnapshot = document , user = getUserDetails(model.userReference))
                     }
-                }catch (e: Exception){
+                } catch (e: Exception) {
                     dataOrExceptionVar.e = e
                 }
             }.invokeOnCompletion {
                 if (it == null)
                     dataOrException(dataOrExceptionVar)
                 else
-                    it.localizedMessage?.let{ msg ->
+                    it.localizedMessage?.let { msg ->
                         Log.v("loool", msg)
 
                     }
@@ -58,5 +63,10 @@ class AnswersRepository @Inject constructor(
             }
         }
 
+    }
+
+
+    suspend fun postAnswer(postId: String, answerModel: AnswerModel) {
+        postsCollection.document(postId).collection("Answers").document().set(answerModel).await()
     }
 }

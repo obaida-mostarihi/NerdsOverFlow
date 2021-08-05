@@ -13,6 +13,7 @@
     <color name="white">#FFFFFFFF</color>
 
     <color name="code_background">#333333</color>
+    <color name="icon_color">#757575</color>
     <color name="light_icon">#F6F6F6</color>
 
     <color name="greenColor">#26A60E</color>

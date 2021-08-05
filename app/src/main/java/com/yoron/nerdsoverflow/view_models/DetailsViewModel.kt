@@ -10,6 +10,7 @@ package com.yoron.nerdsoverflow.view_models
 
 import android.annotation.SuppressLint
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -52,7 +53,13 @@ class DetailsViewModel @Inject constructor(application: Application, val repo: M
 
 
     init {
-        getLanguages()
+
+        viewModelScope.launch {
+            getLanguages()
+
+        }
+
+
     }
 
 
@@ -101,12 +108,15 @@ class DetailsViewModel @Inject constructor(application: Application, val repo: M
                     val language = jsonArray[i] as String
                     languagesList.add(ProgrammingLanguageModel(language = language))
                 }
-                _languages.value = (languagesList)
+                _languages.postValue(languagesList)
             }
 
         } catch (e: IOException) {
+            Log.v("loool" , e.localizedMessage)
             e.printStackTrace()
         } catch (e: JSONException) {
+            Log.v("loool" , e.localizedMessage)
+
             e.printStackTrace()
         }
     }
@@ -116,6 +126,7 @@ class DetailsViewModel @Inject constructor(application: Application, val repo: M
      * Load the json file from the assets folder
      */
     private fun loadJSONFromAsset(): String? {
+
         var json: String? = null
         json = try {
             val `is`: InputStream = context.assets.open("languages.json")

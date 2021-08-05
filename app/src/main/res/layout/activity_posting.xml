@@ -13,7 +13,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/lightColor"
-
     tools:context=".activities.PostingActivity">
 
     <ScrollView
@@ -24,16 +23,29 @@
         android:layout_height="wrap_content"
         android:paddingBottom="100dp">
 
+        <ImageButton
+            android:id="@+id/postingBackButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:background="?android:selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_back_arrow"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/darkColor" />
+
         <TextView
             android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Ask a question"
+            android:layout_marginStart="10dp"
             android:textColor="@color/darkColor"
-            android:layout_margin="10dp"
             android:textSize="18sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintBottom_toBottomOf="@+id/postingBackButton"
+            app:layout_constraintStart_toEndOf="@+id/postingBackButton"
+            app:layout_constraintTop_toTopOf="@+id/postingBackButton" />
 
         <TextView
             android:id="@+id/textView4"

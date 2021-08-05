@@ -8,6 +8,7 @@
 
 package com.yoron.nerdsoverflow.view_models
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.facebook.litho.*
@@ -28,9 +29,20 @@ class AnswersViewModel @Inject constructor(
 
 
     private lateinit var fullAnswerListeners: FullAnswerListeners
-
-
     private val _answers = MutableLiveData<answersDataOrException>()
+
+    private val _loading = MutableLiveData<Boolean>()
+    val loading: LiveData<Boolean> = _loading
+
+
+    fun postAnswer(postId: String, answerModel: AnswerModel) {
+        viewModelScope.launch {
+            _loading.postValue(true)
+            repo.postAnswer(postId, answerModel)
+            _loading.postValue(false)
+
+        }
+    }
 
 
     fun loadAnswers(postId: String) {
