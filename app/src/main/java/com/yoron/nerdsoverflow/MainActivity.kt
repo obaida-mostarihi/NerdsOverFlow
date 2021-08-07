@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.yoron.nerdsoverflow.activities.DetailsActivity
+import com.yoron.nerdsoverflow.activities.SearchActivity
 import com.yoron.nerdsoverflow.activities.UserProfileActivity
 import com.yoron.nerdsoverflow.auth_activities.LoginActivity
 import com.yoron.nerdsoverflow.classes.BetterActivityResult
@@ -73,6 +74,12 @@ class MainActivity : AppCompatActivity() {
             }
 
 
+        }
+
+        mainSearchButton.setOnClickListener {
+            val intent = Intent(this, SearchActivity::class.java)
+            startActivity(intent)
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
         }
 
 

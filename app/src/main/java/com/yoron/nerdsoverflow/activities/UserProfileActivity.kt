@@ -146,11 +146,9 @@ class UserProfileActivity : AppCompatActivity(), HomePostListeners, View.OnClick
             profileUserImage.setOnClickListener(this)
             profileEditButton.setOnClickListener(this)
             profileLanguagesEditButton.setOnClickListener(this)
-            profileUserImage.visibility = View.VISIBLE
             profileEditButton.visibility = View.VISIBLE
             profileLanguagesEditButton.visibility = View.VISIBLE
         } else {
-            profileUserImage.visibility = View.GONE
             profileEditButton.visibility = View.GONE
             profileLanguagesEditButton.visibility = View.GONE
         }

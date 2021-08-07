@@ -22,6 +22,8 @@ import com.facebook.litho.widget.Text;
 import com.facebook.litho.widget.TextAlignment;
 import com.facebook.yoga.YogaAlign;
 import com.facebook.yoga.YogaEdge;
+import com.facebook.yoga.YogaJustify;
+import com.facebook.yoga.YogaWrap;
 import com.yoron.nerdsoverflow.R;
 import com.yoron.nerdsoverflow.java.UserImageNameComponent;
 import com.yoron.nerdsoverflow.models.HomePostModel;
@@ -35,7 +37,6 @@ class HomePostComponentSpec {
                                     @Prop HomePostModel post
     ) {
 
-
         return Column.create(c)
                 .child(
                         Text.create(c)
@@ -47,7 +48,20 @@ class HomePostComponentSpec {
 
                 )
                 .child(
-                        getUserRow(c , post)
+                        getUserRow(c, post)
+
+                )
+                .child(
+                        Row.create(c).child(
+                                Text.create(c).text(post.getLanguage())
+                                        .textColorRes(R.color.greenColor)
+                                        .textSizeSp(12)
+                                        .alignment(TextAlignment.CENTER)
+                                        .backgroundRes(R.drawable.answered_shape)
+                                        .paddingDip(YogaEdge.HORIZONTAL, 7)
+                                        .paddingDip(YogaEdge.VERTICAL, 3)
+                        ).justifyContent(YogaJustify.FLEX_END)
+
                 )
                 .paddingDip(YogaEdge.HORIZONTAL, 10)
 
@@ -55,22 +69,14 @@ class HomePostComponentSpec {
     }
 
 
-    private static Row.Builder getUserRow(ComponentContext c , HomePostModel post){
+    private static Row.Builder getUserRow(ComponentContext c, HomePostModel post) {
         Row.Builder userImageNameAnsweredRowBuilder = Row.create(c).widthPercent(100);
         userImageNameAnsweredRowBuilder.child(
                 UserImageNameComponent.create(c).user(post.getUser())
                         .timestamp(post.getTimestamp())
         );
-        if (post.getAnswered() != null && post.getAnswered())
-            userImageNameAnsweredRowBuilder.child(
-                    Text.create(c).text("Answered")
-                            .textColorRes(R.color.greenColor)
-                            .textSizeSp(12)
-                            .backgroundRes(R.drawable.answered_shape)
-                            .paddingDip(YogaEdge.HORIZONTAL, 7)
-                            .paddingDip(YogaEdge.VERTICAL, 3)
-                            .alignSelf(YogaAlign.CENTER)
-            );
+
+
         return userImageNameAnsweredRowBuilder;
     }
 }

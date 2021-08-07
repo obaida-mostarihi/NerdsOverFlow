@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~
+  ~ Created by Obaida Al Mostarihi on 8/7/21, 7:59 PM
+  ~ Copyright (c) 2021 . All rights reserved.
+  ~ Last modified 8/7/21, 7:59 PM
+  ~
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:padding="16dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:background="?android:selectableItemBackground"
+    android:orientation="horizontal">
+
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/searchImage"
+        android:layout_width="50dp"
+        android:layout_height="50dp"/>
+
+    <TextView
+        android:id="@+id/searchUsername"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textSize="14sp"
+        android:layout_marginStart="10dp"
+        android:textColor="@color/darkColor"
+        tools:text = "nerdsoverflow"/>
+
+
+</LinearLayout>

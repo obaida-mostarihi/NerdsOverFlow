@@ -123,7 +123,7 @@ class MainRepository @Inject constructor(
     suspend fun setUserImage(uri: Uri) {
         Firebase.auth.currentUser?.let { user ->
 
-            val uploadResult = Firebase.storage.reference.child("UsersImages").putFile(uri).await()
+            val uploadResult = Firebase.storage.reference.child("UsersImages").child(user.uid).putFile(uri).await()
 
             val imageUrl = uploadResult.storage.downloadUrl.await().toString()
 
