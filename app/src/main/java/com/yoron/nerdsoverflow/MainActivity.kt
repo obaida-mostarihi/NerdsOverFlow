@@ -10,6 +10,7 @@ package com.yoron.nerdsoverflow
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.viewModels
@@ -17,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.yoron.nerdsoverflow.activities.DetailsActivity
+import com.yoron.nerdsoverflow.activities.UserProfileActivity
 import com.yoron.nerdsoverflow.auth_activities.LoginActivity
 import com.yoron.nerdsoverflow.classes.BetterActivityResult
 import com.yoron.nerdsoverflow.classes.asCircle
@@ -24,6 +26,7 @@ import com.yoron.nerdsoverflow.main_fragments.HomeFragment
 import com.yoron.nerdsoverflow.view_models.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
+import java.io.Serializable
 
 
 @AndroidEntryPoint
@@ -37,6 +40,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
 
         //Check if the user is logged in if not intent to login activity
         if (auth.currentUser == null) {
@@ -46,9 +50,8 @@ class MainActivity : AppCompatActivity() {
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             return
         }
-        setContentView(R.layout.activity_main)
         homeFragment = HomeFragment(activityLauncher)
-        mainViewModel.checkForDetails()
+        Firebase.auth.currentUser?.let { mainViewModel.checkForDetails(it.uid) }
         mainViewModel.hasDetails.observe(this) { dataOrException ->
             if (dataOrException.e != null) {
                 val intent = Intent(this, DetailsActivity::class.java)
@@ -58,7 +61,14 @@ class MainActivity : AppCompatActivity() {
             } else {
                 dataOrException.data?.let { user ->
                     mainUserImage.asCircle()
+                    user.uid?.let { Log.v("looool" , it) }
                     mainUserImage.setImageURI(user.image)
+                    mainUserImage.setOnClickListener {
+                        val profileIntent = Intent(this, UserProfileActivity::class.java)
+                        profileIntent.putExtra("uid", user.uid)
+                        startActivity(profileIntent)
+                    }
+
                 }
             }
 

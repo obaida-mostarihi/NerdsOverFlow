@@ -35,6 +35,7 @@ class UserImageNameComponentSpec {
                                     @Prop Timestamp timestamp
                                     ) {
 
+        if (user != null)
         return Row.create(c)
                 .child(
                         FrescoImageView.create(c).url(user.getImage())
@@ -61,5 +62,9 @@ class UserImageNameComponentSpec {
 
                 )
                 .build();
+
+
+        else
+            return Row.create(c).build();
     }
 }

@@ -24,18 +24,33 @@ class AuthRepository @Inject constructor(
     /**
      * @return Data of type AuthResult or Exception
      */
-    suspend fun loginUserToAnAccount(email: String , password: String): AuthDataOrException{
+    suspend fun loginUserToAnAccount(email: String, password: String): AuthDataOrException {
 
-        val dataOrException =  AuthDataOrException()
+        val dataOrException = AuthDataOrException()
         try {
             val authResult = auth.signInWithEmailAndPassword(email, password).await()
             dataOrException.data = authResult
-        }catch (e: FirebaseAuthException){
+        } catch (e: FirebaseAuthException) {
             dataOrException.e = e
-        }catch (e: Exception){
+        } catch (e: Exception) {
             dataOrException.e = e
         }
 
+        return dataOrException
+    }
+
+
+    suspend fun registerANewAccount(email: String, password: String): AuthDataOrException {
+        val dataOrException = AuthDataOrException()
+
+        try {
+            val authResult = auth.createUserWithEmailAndPassword(email, password).await()
+            dataOrException.data = authResult
+        } catch (e: FirebaseAuthException) {
+            dataOrException.e = e
+        } catch (e: Exception) {
+            dataOrException.e = e
+        }
         return dataOrException
     }
 

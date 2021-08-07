@@ -17,6 +17,7 @@ import androidx.lifecycle.Observer
 import com.google.firebase.auth.FirebaseAuthException
 import com.yoron.nerdsoverflow.MainActivity
 import com.yoron.nerdsoverflow.R
+import com.yoron.nerdsoverflow.activities.RegisterActivity
 import com.yoron.nerdsoverflow.custom_views.CoderWriterView
 import com.yoron.nerdsoverflow.dialogs.LoadingDialog
 import com.yoron.nerdsoverflow.view_models.AuthDataOrException
@@ -42,6 +43,11 @@ class LoginActivity : AppCompatActivity() {
 
         //Listen for the ViewModel observer
         viewModelObservers()
+
+
+        loginCreateAccountButton.setOnClickListener {
+        startActivity(Intent(this , RegisterActivity::class.java))
+        }
 
     }
 

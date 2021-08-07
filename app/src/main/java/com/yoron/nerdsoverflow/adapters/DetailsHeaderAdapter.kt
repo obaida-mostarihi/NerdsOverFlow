@@ -17,7 +17,7 @@ import com.yoron.nerdsoverflow.R
 import com.yoron.nerdsoverflow.adapters.DetailsHeaderAdapter.ViewHolder
 import kotlinx.android.synthetic.main.details_header_layout.view.*
 
-open class DetailsHeaderAdapter:
+open class DetailsHeaderAdapter(val onlyLanguages: Boolean? = false):
 RecyclerView.Adapter<ViewHolder>() {
 
     private lateinit var searchTextWatcher: TextWatcher
@@ -31,12 +31,13 @@ RecyclerView.Adapter<ViewHolder>() {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.details_header_layout, parent, false)
 
-        return ViewHolder(view,searchTextWatcher , usernameTextWatcher)
+        return ViewHolder(view,searchTextWatcher , usernameTextWatcher , onlyLanguages)
     }
 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.setLanguagesNumber(numberOfSelectedLanguages)
+
     }
 
     override fun getItemCount(): Int {
@@ -65,12 +66,20 @@ RecyclerView.Adapter<ViewHolder>() {
         return position.toLong()
     }
 
-     class ViewHolder(val view: View, searchTextWatcher: TextWatcher, usernameTextWatcher: TextWatcher) : RecyclerView.ViewHolder(view){
+     class ViewHolder(val view: View, searchTextWatcher: TextWatcher, usernameTextWatcher: TextWatcher,val onlyLanguages: Boolean? = false) : RecyclerView.ViewHolder(view){
 
         init {
             view.detailsCategorySearchEt.addTextChangedListener(searchTextWatcher)
             view.detailsUsernameEt.addTextChangedListener(usernameTextWatcher)
 
+            if (onlyLanguages == true) {
+                view.detailsUsernameEt.visibility = View.GONE
+                view.textView2.visibility = View.GONE
+            }else{
+                view.detailsUsernameEt.visibility = View.VISIBLE
+                view.textView2.visibility = View.VISIBLE
+
+            }
         }
 
          fun setLanguagesNumber(number: Int){

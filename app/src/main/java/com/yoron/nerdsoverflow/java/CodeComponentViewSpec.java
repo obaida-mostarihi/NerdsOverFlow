@@ -60,7 +60,7 @@ class CodeComponentViewSpec {
             codeView
                     .setLanguage(Language.AUTO)
                     .setTheme(Theme.AGATE)
-                    .setCode(code)
+                    .setCode(code+"\n\n\n")
                     .setFontSize(14)
                     .setWrapLine(true)
                     .apply();

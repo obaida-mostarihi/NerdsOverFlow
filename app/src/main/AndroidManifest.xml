@@ -12,7 +12,8 @@
         android:supportsRtl="false"
         android:theme="@style/Theme.NerdsOverFlow"
         tools:replace="android:supportsRtl">
-        <activity android:name=".activities.AnsweringActivity"></activity>
+        <activity android:name=".activities.RegisterActivity"></activity>
+        <activity android:name=".activities.AnsweringActivity" />
         <activity android:name=".activities.UserProfileActivity" />
         <activity
             android:name=".activities.PostingActivity"

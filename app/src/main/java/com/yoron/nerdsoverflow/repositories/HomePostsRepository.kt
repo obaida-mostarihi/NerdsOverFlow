@@ -64,5 +64,41 @@ class HomePostsRepository @Inject constructor(
 
     }
 
+    suspend fun getSpecificUserPosts(
+        documentSnapshot: DocumentSnapshot? = null,
+        userRef: DocumentReference,
+        dataOrException: (DataOrException<HomePostsList, Exception>) -> Unit?
+    ) {
+        val dataOrExceptionVar = DataOrException<HomePostsList, Exception>()
+        val query = if (documentSnapshot == null) {
+            homePostsQuery.whereEqualTo("userReference" , userRef)
+        } else {
+            homePostsQuery.whereEqualTo("userReference" , userRef).startAfter(documentSnapshot)
+        }
+
+        withContext(Dispatchers.Main){
+            async {
+                try {
+                    dataOrExceptionVar.data = query.get().await().mapNotNull { document ->
+                        val model = document.toObject(HomePostModel::class.java)
+                        model.copy(documentSnapshot = document,user = getUserDetails(model.userReference))
+                    }
+                }catch (e: Exception){
+                    dataOrExceptionVar.e = e
+                    Log.v("loool" , e.localizedMessage)
+                }
+            }.invokeOnCompletion {
+                if (it == null)
+                    dataOrException(dataOrExceptionVar)
+                else
+                    Log.v("loool", it.localizedMessage)
+
+            }
+        }
+
+
+
+
+    }
 
 }

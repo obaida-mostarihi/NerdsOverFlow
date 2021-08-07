@@ -8,6 +8,7 @@
 
 package com.yoron.nerdsoverflow.view_models
 
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -28,9 +29,24 @@ class MainViewModel @Inject constructor(
     val hasDetails: LiveData<DataOrException<UserModel, Exception>> = _hasDetails
 
 
-    fun checkForDetails(){
+    private val _loading = MutableLiveData<Boolean>()
+    val loading : LiveData<Boolean> = _loading
+
+
+    fun checkForDetails(uid: String) {
         viewModelScope.launch {
-            _hasDetails.value = repo.hasDetails()
+            repo.hasDetails(uid = uid) {
+                _hasDetails.value = it
+            }
+        }
+    }
+
+
+    fun setUserImage(uri: Uri) {
+        viewModelScope.launch {
+            _loading.postValue(true)
+            repo.setUserImage(uri)
+            _loading.postValue(false)
         }
     }
 

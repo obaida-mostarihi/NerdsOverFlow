@@ -63,27 +63,48 @@ class DetailsViewModel @Inject constructor(application: Application, val repo: M
     }
 
 
-    fun registerDetails() {
+    fun registerDetails(onlyLanguages: Boolean? = false) {
         viewModelScope.launch {
-            if (username.value != null && selectedLanguages.value != null) {
-                _loading.postValue(true)
-                _dataOrException.value =
-                    repo.setDetails(username.value!!, selectedLanguages.value!!)
-                _loading.postValue(false)
-
-            } else {
-                if (username.value == null)
+            if (onlyLanguages == false) {
+                if (username.value != null && selectedLanguages.value != null) {
+                    _loading.postValue(true)
                     _dataOrException.value =
-                        DataOrException(false, Exception("Please don't leave the username empty."))
-                else
-                    _dataOrException.value =
-                        DataOrException(
-                            false,
-                            Exception("Please select one or more programming languages.")
-                        )
+                        repo.setDetails(username.value!!, selectedLanguages.value!!)
+                    _loading.postValue(false)
 
+                } else {
+                    if (username.value == null)
+                        _dataOrException.value =
+                            DataOrException(
+                                false,
+                                Exception("Please don't leave the username empty.")
+                            )
+                    else
+                        _dataOrException.value =
+                            DataOrException(
+                                false,
+                                Exception("Please select one or more programming languages.")
+                            )
+
+                }
+            }else{
+                if ( selectedLanguages.value != null) {
+                    _loading.postValue(true)
+                    _dataOrException.value =
+                        repo.setDetails( selectedLanguages = selectedLanguages.value!! )
+                    _loading.postValue(false)
+
+                } else {
+                        _dataOrException.value =
+                            DataOrException(
+                                false,
+                                Exception("Please select one or more programming languages.")
+                            )
+
+                }
             }
         }
+
     }
 
 
@@ -112,10 +133,10 @@ class DetailsViewModel @Inject constructor(application: Application, val repo: M
             }
 
         } catch (e: IOException) {
-            Log.v("loool" , e.localizedMessage)
+            Log.v("loool", e.localizedMessage)
             e.printStackTrace()
         } catch (e: JSONException) {
-            Log.v("loool" , e.localizedMessage)
+            Log.v("loool", e.localizedMessage)
 
             e.printStackTrace()
         }

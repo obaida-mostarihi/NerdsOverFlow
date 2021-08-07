@@ -44,6 +44,7 @@ class DetailsActivity : FragmentActivity(), ProgrammingLanguagesAdapter.Selected
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_details)
 
+        val onlyLanguages = intent.getBooleanExtra("onlyLanguages", false)
         val layoutManager = FlexboxLayoutManager(this)
         layoutManager.apply {
             flexDirection = FlexDirection.ROW
@@ -55,7 +56,7 @@ class DetailsActivity : FragmentActivity(), ProgrammingLanguagesAdapter.Selected
         programmingLanguagesRecyclerView.layoutManager = layoutManager
 
         programmingLanguagesAdapter = ProgrammingLanguagesAdapter(ArrayList())
-        headerAdapter = DetailsHeaderAdapter()
+        headerAdapter = DetailsHeaderAdapter(onlyLanguages)
         programmingLanguagesRecyclerView.adapter =
             ConcatAdapter(headerAdapter, programmingLanguagesAdapter)
 
@@ -68,7 +69,7 @@ class DetailsActivity : FragmentActivity(), ProgrammingLanguagesAdapter.Selected
 
 
         detailsSubmitFab.setOnClickListener {
-            detailsViewModel.registerDetails()
+            detailsViewModel.registerDetails(onlyLanguages)
         }
 
         programmingLanguagesAdapter.setSelectionListener(this)
@@ -79,10 +80,16 @@ class DetailsActivity : FragmentActivity(), ProgrammingLanguagesAdapter.Selected
 
         detailsViewModel.dataOrException.observe(this) { dataOrException ->
             if (dataOrException.data == true) {
-                val intent = Intent(this, MainActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                startActivity(intent)
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+                if (!onlyLanguages) {
+                    val intent = Intent(this, MainActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    startActivity(intent)
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+                } else {
+                    finish()
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+
+                }
             } else {
                 dataOrException.e?.let {
                     CookieBar.build(this)
@@ -105,6 +112,12 @@ class DetailsActivity : FragmentActivity(), ProgrammingLanguagesAdapter.Selected
         }
     }
 
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+
+    }
 
     private fun recyclerviewScrollListener() = object :
         RecyclerView.OnScrollListener() {

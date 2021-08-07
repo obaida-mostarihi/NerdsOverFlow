@@ -7,11 +7,176 @@
   ~
   -->
 
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:background="@color/lightColor"
     tools:context=".activities.UserProfileActivity">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/profileAppBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:clipChildren="false"
+        android:translationZ="10dp"
+        android:elevation="0dp"
+        android:background="@android:color/transparent"
+        >
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/collapsing_toolbar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:contentScrim="@android:color/transparent"
+            app:expandedTitleGravity="top"
+            android:clipToPadding="false"
+            android:clipChildren="false"
+            android:descendantFocusability="blocksDescendants"
+            android:background="@android:color/transparent"
+            app:expandedTitleMarginStart="48dp"
+            app:expandedTitleMarginEnd="64dp"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_bottoms"
+                android:clipChildren="false"
+                android:clipToPadding="false"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="20dp"
+                android:clickable="true"
+                android:elevation="10dp"
+
+                android:focusable="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+
+                <ImageButton
+                    android:id="@+id/profileBackButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:background="?android:selectableItemBackgroundBorderless"
+                    android:src="@drawable/ic_back_arrow"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/darkColor" />
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="Profile"
+                    android:textColor="@color/darkColor"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/profileBackButton"
+                    app:layout_constraintStart_toEndOf="@+id/profileBackButton"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+                <com.facebook.drawee.view.SimpleDraweeView
+                    android:id="@+id/profileUserImage"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/profileBackButton"
+                    tools:backgroundImage="@drawable/circle_shape" />
+
+                <ImageButton
+                    android:id="@+id/profileEditButton"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:background="@drawable/circle_shape"
+                    android:backgroundTint="@color/darkColor"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_edit"
+                    app:layout_constraintBottom_toBottomOf="@+id/profileUserImage"
+                    app:layout_constraintEnd_toEndOf="@+id/profileUserImage" />
+
+                <com.yoron.nerdsoverflow.custom_views.CoderWriterView
+                    android:id="@+id/profileUsername"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="10dp"
+                    android:shadowColor="@color/darkColor"
+                    android:shadowDx="0"
+                    android:shadowDy="0"
+                    android:shadowRadius="20"
+                    android:textColor="@color/darkColor"
+                    app:layout_constraintEnd_toEndOf="@+id/profileUserImage"
+                    app:layout_constraintStart_toStartOf="@+id/profileUserImage"
+                    app:layout_constraintTop_toBottomOf="@+id/profileUserImage"
+                    tools:text="Yoron" />
+
+
+                <com.google.android.flexbox.FlexboxLayout
+                    android:id="@+id/profileFlexBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    app:flexDirection="row"
+                    app:flexWrap="wrap"
+                    app:justifyContent="center"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/profileUsername" />
+
+                <ImageButton
+                    android:id="@+id/profileLanguagesEditButton"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:background="@drawable/circle_shape"
+                    android:backgroundTint="@color/darkColor"
+                    android:padding="16dp"
+                    android:src="@drawable/ic_edit"
+                    app:layout_constraintBottom_toBottomOf="@+id/profileFlexBox"
+                    app:layout_constraintEnd_toEndOf="@+id/profileFlexBox"
+                    app:layout_constraintStart_toEndOf="@+id/profileFlexBox"
+                    app:layout_constraintTop_toTopOf="@+id/profileFlexBox" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+    <com.facebook.litho.LithoView
+        android:id="@+id/profileLithoView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
+
+
+    <com.yoron.nerdsoverflow.custom_views.CustomBottomSheet
+        android:id="@+id/profileBottomSheet"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <include layout="@layout/full_post_layout"/>
+
+    </com.yoron.nerdsoverflow.custom_views.CustomBottomSheet>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

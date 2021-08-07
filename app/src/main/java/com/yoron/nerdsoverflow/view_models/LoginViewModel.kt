@@ -73,7 +73,7 @@ class LoginViewModel @Inject constructor(
 
 
 enum class ErrorType {
-    EMAIL, PASSWORD
+    EMAIL, PASSWORD , RETYPE_PASSWORD
 }
 
 data class ErrorModel<T : ErrorType, E : Exception>(

@@ -27,7 +27,7 @@ class FullScreenCodeActivity : AppCompatActivity() {
         code?.let {
             fullScreenCodeView.setTheme(Theme.AGATE)
                 .setLanguage(Language.AUTO)
-                .setCode(it)
+                .setCode("$it\n\n\n")
                 .setFontSize(14f)
                 .setWrapLine(true)
                 .setShowLineNumber(true)

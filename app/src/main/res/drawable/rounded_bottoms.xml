@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~
+  ~ Created by Obaida Al Mostarihi on 8/5/21, 1:49 PM
+  ~ Copyright (c) 2021 . All rights reserved.
+  ~ Last modified 8/5/21, 1:49 PM
+  ~
+  -->
+
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <solid android:color="@color/lightColor"/>
+    <corners android:bottomRightRadius="30dp" android:bottomLeftRadius="30dp"/>
+</shape>
